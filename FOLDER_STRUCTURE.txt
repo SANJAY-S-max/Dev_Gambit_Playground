@@ -1,0 +1,159 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              DEV GAMBIT PLAYGROUND — FOLDER STRUCTURE GUIDE                 ║
+║              Last Updated: October 2026                                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT IS THIS REPO?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  This is SANJAY-S-max's personal learning playground.
+  The owner watches YouTube tutorials and codes along with them.
+  Every project/folder here comes directly from a YouTube tutorial.
+  Projects are organized by TECH STACK CATEGORY, not by date.
+
+  RULE: When a new project/folder is dropped into this repo root,
+  analyze its content and move it into the correct stack category folder.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TOP-LEVEL FOLDER CATEGORIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Dev_Gambit_Playground/
+  │
+  ├── Java_Stack/           → All Java-related learning projects
+  ├── MERN_Stack/           → All JavaScript full-stack projects (MongoDB, Express, React, Node)
+  ├── tomcat/               → Apache Tomcat server installations used for Java web projects
+  ├── .gitignore            → Git ignore rules (IDE files, binaries, node_modules, etc.)
+  ├── FOLDER_STRUCTURE.txt  → THIS FILE — explains repo structure (update when adding folders)
+  └── README.md             → GitHub landing page with chess theme
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  JAVA_STACK/ — DETAILED STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Java_Stack/
+  │
+  ├── JSP_Servlet_Projects/
+  │   │   → Java web projects using JSP (JavaServer Pages) and Servlets
+  │   │   → Typically run on Apache Tomcat server
+  │   │   → Built with Maven (pom.xml present)
+  │   │
+  │   ├── Alien/              → Servlet practice project
+  │   ├── DemoApp/            → Basic demo web application
+  │   ├── DemoFilter/         → Servlet Filter implementation demo
+  │   ├── DemoJSP/            → JSP fundamentals and EL expressions
+  │   ├── FileUploadDemo/     → File upload using Servlet API
+  │   ├── JSTLDemo/           → JSTL (JSP Standard Tag Library) usage
+  │   ├── LoginModule/        → Login and authentication with sessions
+  │   ├── Students/           → Student management CRUD application
+  │   └── WorkingJSP/         → Complete working JSP web project
+  │
+  ├── Spring_Projects/
+  │   │   → Projects using Spring Framework / Spring Boot
+  │   │   → REST APIs, MVC, Spring Security, Spring Data JPA
+  │   │   → Typically Maven/Gradle projects with application.properties
+  │   │
+  │   └── (add Spring Boot projects here)
+  │
+  ├── Hibernate_JPA/
+  │   │   → ORM projects using Hibernate or Jakarta Persistence API
+  │   │   → Database mapping, JPQL, entity relationships
+  │   │
+  │   └── (add Hibernate/JPA projects here)
+  │
+  └── Other_Java/
+      │   → Core Java, DSA (Data Structures & Algorithms), standalone Java apps
+      │   → Java SE practice, design patterns, console applications
+      │
+      └── (add core Java / other Java projects here)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MERN_STACK/ — DETAILED STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  MERN_Stack/
+  │
+  ├── Frontend/
+  │   │   → Pure HTML/CSS/JS projects, React projects, Tailwind CSS projects
+  │   │   → UI/UX practice, component building, static websites
+  │   │
+  │   └── Website_using_Tailwindcss/   → First website built with Tailwind CSS
+  │
+  └── Node_Express/
+      │   → Backend Node.js and Express.js projects
+      │   → REST APIs, middleware, routing, server-side JS
+      │
+      ├── Node Basic/       → Node.js fundamentals (fs, http, modules)
+      └── Express basic/    → Express.js fundamentals (routing, middleware)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TOMCAT/ — DETAILED STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  tomcat/
+  │   → Apache Tomcat server installations
+  │   → Used to run JSP/Servlet and Spring MVC projects locally
+  │   → Multiple versions may exist for different projects
+  │
+  ├── apache-tomcat-10.1.36/           → Tomcat version 10.1.36
+  ├── apache-tomcat-10.1.59/           → Tomcat version 10.1.59
+  └── apache-tomcat-10.1.60-windows-x64/ → Tomcat version 10.1.60 (Windows)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HOW TO CATEGORIZE A NEW PROJECT (FOR AI ASSISTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  When a new folder is dropped into the repo root, analyze it and move it:
+
+  IF contains pom.xml + web.xml + .jsp files
+      → Java_Stack/JSP_Servlet_Projects/
+
+  IF contains pom.xml + application.properties + @SpringBootApplication
+      → Java_Stack/Spring_Projects/
+
+  IF contains pom.xml + persistence.xml OR @Entity classes
+      → Java_Stack/Hibernate_JPA/
+
+  IF contains .java files only (no web layer)
+      → Java_Stack/Other_Java/
+
+  IF contains package.json + React / JSX files (src/App.jsx or App.js)
+      → MERN_Stack/Frontend/
+
+  IF contains index.html / .html / .css / .js only (no framework)
+      → MERN_Stack/Frontend/
+
+  IF contains package.json + express + server.js / app.js (no React)
+      → MERN_Stack/Node_Express/
+
+  IF contains Tomcat server installation (bin/startup.bat present)
+      → tomcat/
+
+  IF a COMPLETELY NEW STACK (e.g., Python, Django, Flask, PHP, etc.)
+      → Create a NEW top-level folder: e.g., Python_Stack/
+      → Update this FOLDER_STRUCTURE.txt with the new stack details
+      → Update README.md stacks table
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FUTURE STACKS TO ADD (Planned)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [ ] Python_Stack/      → Python, Django, Flask, FastAPI
+  [ ] DevOps/            → Docker, Kubernetes, CI/CD pipelines
+  [ ] Database/          → SQL practice, MongoDB queries, Redis
+  [ ] DSA/               → Data Structures & Algorithms practice
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  UPDATE LOG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [Oct 2026] - Initial structure created
+              Java_Stack: JSP_Servlet_Projects, Spring_Projects,
+                          Hibernate_JPA, Other_Java
+              MERN_Stack: Frontend, Node_Express
+              tomcat: Apache Tomcat 10.1.x installations
+
+  [Add new entries here when new stacks or folders are added]
+
+══════════════════════════════════════════════════════════════════════════════
