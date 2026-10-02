@@ -1,0 +1,208 @@
+10-Sep-2026 17:48:10.685 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.59
+10-Sep-2026 17:48:10.689 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Aug 13 2026 16:59:10 UTC
+10-Sep-2026 17:48:10.689 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.59.0
+10-Sep-2026 17:48:10.689 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+10-Sep-2026 17:48:10.689 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+10-Sep-2026 17:48:10.689 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+10-Sep-2026 17:48:10.690 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Apache NetBeans\jdk
+10-Sep-2026 17:48:10.690 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           26.0.2+10
+10-Sep-2026 17:48:10.690 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Eclipse Adoptium
+10-Sep-2026 17:48:10.690 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 17:48:10.690 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 17:48:10.701 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\logging.properties
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dhttp.nonProxyHosts=localhost|127.0.0.1|KRNL-HP
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+10-Sep-2026 17:48:10.702 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+10-Sep-2026 17:48:10.703 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 17:48:10.703 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 17:48:10.703 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\temp
+10-Sep-2026 17:48:10.726 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [C:\Program Files\Apache NetBeans\jdk\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\krnl\AppData\Local\BraveSoftware\Brave-Browser\Application;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\MinGW\bin;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Users\krnl\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\krnl\AppData\Local\Programs\Python\Python312\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\krnl\AppData\Local\Microsoft\WindowsApps;C:\Users\krnl\AppData\Local\Programs\Antigravity IDE\bin;C:\Users\krnl\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\krnl\AppData\Roaming\npm;C:\Users\krnl\AppData\Local\Programs\Ollama;C:\Users\krnl\AppData\Local\Microsoft\WinGet\Links;C:\Users\krnl\AppData\Local\Python\bin;C:\Users\krnl\AppData\Local\PowerToys\DSCModules\;C:\Program Files\Apache NetBeans\bin\;.]
+10-Sep-2026 17:48:11.056 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 17:48:11.091 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [675] milliseconds
+10-Sep-2026 17:48:11.177 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+10-Sep-2026 17:48:11.178 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.59]
+10-Sep-2026 17:48:11.199 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs]
+10-Sep-2026 17:48:11.817 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs] has finished in [614] ms
+10-Sep-2026 17:48:11.817 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples]
+10-Sep-2026 17:48:12.568 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples] has finished in [751] ms
+10-Sep-2026 17:48:12.569 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager]
+10-Sep-2026 17:48:12.641 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager] has finished in [72] ms
+10-Sep-2026 17:48:12.642 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager]
+10-Sep-2026 17:48:12.709 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager] has finished in [67] ms
+10-Sep-2026 17:48:12.710 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT]
+10-Sep-2026 17:48:12.756 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT] has finished in [46] ms
+10-Sep-2026 17:48:12.762 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 17:48:12.808 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [1712] milliseconds
+10-Sep-2026 17:48:56.243 WARNING [http-nio-8080-exec-6] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:56.517 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:56.673 WARNING [http-nio-8080-exec-1] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:56.829 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:56.958 WARNING [http-nio-8080-exec-7] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:57.083 WARNING [http-nio-8080-exec-6] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:57.208 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:57.339 WARNING [http-nio-8080-exec-1] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:57.514 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:57.658 WARNING [http-nio-8080-exec-7] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:57.881 WARNING [http-nio-8080-exec-6] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:59.437 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:48:59.600 WARNING [http-nio-8080-exec-1] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:04.644 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:04.657 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:04.660 WARNING [http-nio-8080-exec-5] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:04.665 WARNING [http-nio-8080-exec-7] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:16.914 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:18.892 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:19.607 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:19.760 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:19.900 WARNING [http-nio-8080-exec-7] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:20.020 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:20.145 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:20.350 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:49:26.484 WARNING [http-nio-8080-exec-7] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:26.914 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:27.174 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:30.645 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:31.405 WARNING [http-nio-8080-exec-4] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:32.408 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:32.416 WARNING [http-nio-8080-exec-4] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:34.112 WARNING [http-nio-8080-exec-6] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:34.119 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:49:53.770 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:01.171 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:01.181 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:01.181 WARNING [http-nio-8080-exec-7] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:01.185 WARNING [http-nio-8080-exec-5] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:01.188 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:11.452 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:18.898 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:50:19.917 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:50:20.799 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:50:21.454 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:22.001 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:50:31.496 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:50:41.493 WARNING [http-nio-8080-exec-4] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user []
+10-Sep-2026 17:55:47.218 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:55:47.360 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:55:47.509 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:55:47.652 WARNING [http-nio-8080-exec-8] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:55:47.764 WARNING [http-nio-8080-exec-2] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:55:47.981 WARNING [http-nio-8080-exec-9] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:55:50.162 WARNING [http-nio-8080-exec-3] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 17:56:00.164 WARNING [http-nio-8080-exec-5] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 18:00:27.252 WARNING [http-nio-8080-exec-10] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 18:00:32.896 WARNING [http-nio-8080-exec-4] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 18:00:32.928 WARNING [http-nio-8080-exec-1] org.apache.catalina.realm.LockOutRealm.filterLockedAccounts An attempt was made to authenticate the locked user [krnl]
+10-Sep-2026 18:00:33.441 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+10-Sep-2026 18:00:33.443 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:00:33.453 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+10-Sep-2026 18:00:33.479 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:00:33.488 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:12:39.125 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.59
+10-Sep-2026 18:12:39.130 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Aug 13 2026 16:59:10 UTC
+10-Sep-2026 18:12:39.130 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.59.0
+10-Sep-2026 18:12:39.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+10-Sep-2026 18:12:39.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+10-Sep-2026 18:12:39.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+10-Sep-2026 18:12:39.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Apache NetBeans\jdk
+10-Sep-2026 18:12:39.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           26.0.2+10
+10-Sep-2026 18:12:39.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Eclipse Adoptium
+10-Sep-2026 18:12:39.132 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:12:39.132 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:12:39.149 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\logging.properties
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+10-Sep-2026 18:12:39.150 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+10-Sep-2026 18:12:39.151 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+10-Sep-2026 18:12:39.151 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+10-Sep-2026 18:12:39.151 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:12:39.151 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:12:39.151 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\temp
+10-Sep-2026 18:12:39.163 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [C:\Program Files\Apache NetBeans\jdk\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\MinGW\bin;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Users\krnl\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\krnl\AppData\Local\Programs\Python\Python312\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\krnl\AppData\Local\Microsoft\WindowsApps;C:\Users\krnl\AppData\Local\Programs\Antigravity IDE\bin;C:\Users\krnl\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\krnl\AppData\Roaming\npm;C:\Users\krnl\AppData\Local\Programs\Ollama;C:\Users\krnl\AppData\Local\Microsoft\WinGet\Links;C:\Users\krnl\AppData\Local\Python\bin;C:\Users\krnl\AppData\Local\PowerToys\DSCModules\;C:\Program Files\Apache NetBeans\bin\;.]
+10-Sep-2026 18:12:39.621 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:12:39.656 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [857] milliseconds
+10-Sep-2026 18:12:39.754 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+10-Sep-2026 18:12:39.755 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.59]
+10-Sep-2026 18:12:39.778 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs]
+10-Sep-2026 18:12:40.369 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs] has finished in [585] ms
+10-Sep-2026 18:12:40.370 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples]
+10-Sep-2026 18:12:40.946 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples] has finished in [575] ms
+10-Sep-2026 18:12:40.946 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager]
+10-Sep-2026 18:12:41.005 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager] has finished in [59] ms
+10-Sep-2026 18:12:41.006 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager]
+10-Sep-2026 18:12:41.065 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager] has finished in [59] ms
+10-Sep-2026 18:12:41.065 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT]
+10-Sep-2026 18:12:41.119 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT] has finished in [54] ms
+10-Sep-2026 18:12:41.127 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:12:41.165 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [1505] milliseconds
+10-Sep-2026 18:12:41.342 INFO [http-nio-8080-exec-5] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml]
+10-Sep-2026 18:12:41.344 WARNING [http-nio-8080-exec-5] org.apache.catalina.startup.HostConfig.deployDescriptor The path attribute with value [/WorkingJSP] in deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml] has been ignored
+10-Sep-2026 18:12:41.432 INFO [http-nio-8080-exec-5] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml] has finished in [90] ms
+10-Sep-2026 18:12:41.438 INFO [http-nio-8080-exec-7] org.apache.catalina.util.LifecycleBase.start The start() method was called on component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/WorkingJSP]] after start() had already been called. The second call will be ignored.
+10-Sep-2026 18:15:05.684 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+10-Sep-2026 18:15:05.689 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:15:05.697 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+10-Sep-2026 18:15:05.727 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:15:05.733 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:15:12.069 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.59
+10-Sep-2026 18:15:12.073 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Aug 13 2026 16:59:10 UTC
+10-Sep-2026 18:15:12.073 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.59.0
+10-Sep-2026 18:15:12.073 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+10-Sep-2026 18:15:12.073 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+10-Sep-2026 18:15:12.074 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+10-Sep-2026 18:15:12.074 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Apache NetBeans\jdk
+10-Sep-2026 18:15:12.074 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           26.0.2+10
+10-Sep-2026 18:15:12.074 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Eclipse Adoptium
+10-Sep-2026 18:15:12.074 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:15:12.074 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:15:12.086 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\logging.properties
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+10-Sep-2026 18:15:12.087 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\temp
+10-Sep-2026 18:15:12.135 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [C:\Program Files\Apache NetBeans\jdk\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\MinGW\bin;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Users\krnl\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\krnl\AppData\Local\Programs\Python\Python312\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\krnl\AppData\Local\Microsoft\WindowsApps;C:\Users\krnl\AppData\Local\Programs\Antigravity IDE\bin;C:\Users\krnl\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\krnl\AppData\Roaming\npm;C:\Users\krnl\AppData\Local\Programs\Ollama;C:\Users\krnl\AppData\Local\Microsoft\WinGet\Links;C:\Users\krnl\AppData\Local\Python\bin;C:\Users\krnl\AppData\Local\PowerToys\DSCModules\;C:\Program Files\Apache NetBeans\bin\;.]
+10-Sep-2026 18:15:12.448 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:15:12.477 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [636] milliseconds
+10-Sep-2026 18:15:12.549 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+10-Sep-2026 18:15:12.549 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.59]
+10-Sep-2026 18:15:12.566 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml]
+10-Sep-2026 18:15:12.596 WARNING [main] org.apache.catalina.startup.HostConfig.deployDescriptor The path attribute with value [/WorkingJSP] in deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml] has been ignored
+10-Sep-2026 18:15:12.991 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml] has finished in [422] ms
+10-Sep-2026 18:15:12.992 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs]
+10-Sep-2026 18:15:13.038 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs] has finished in [46] ms
+10-Sep-2026 18:15:13.039 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples]
+10-Sep-2026 18:15:13.616 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples] has finished in [577] ms
+10-Sep-2026 18:15:13.617 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager]
+10-Sep-2026 18:15:13.684 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager] has finished in [67] ms
+10-Sep-2026 18:15:13.684 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager]
+10-Sep-2026 18:15:13.743 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager] has finished in [59] ms
+10-Sep-2026 18:15:13.744 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT]
+10-Sep-2026 18:15:13.786 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT] has finished in [42] ms
+10-Sep-2026 18:15:13.792 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 18:15:13.825 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [1344] milliseconds
+10-Sep-2026 19:16:11.712 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+10-Sep-2026 19:16:11.726 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 19:16:11.742 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+10-Sep-2026 19:16:11.803 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+10-Sep-2026 19:16:11.813 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]

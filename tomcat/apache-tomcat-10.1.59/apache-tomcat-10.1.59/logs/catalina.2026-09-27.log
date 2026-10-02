@@ -1,0 +1,50 @@
+27-Sep-2026 22:02:03.843 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/10.1.59
+27-Sep-2026 22:02:03.856 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Aug 13 2026 16:59:10 UTC
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 10.1.59.0
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-17
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           17.0.12+8-LTS-286
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+27-Sep-2026 22:02:03.859 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\logging.properties
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+27-Sep-2026 22:02:04.021 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+27-Sep-2026 22:02:04.024 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+27-Sep-2026 22:02:04.024 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+27-Sep-2026 22:02:04.024 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59
+27-Sep-2026 22:02:04.024 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\temp
+27-Sep-2026 22:02:04.039 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The Apache Tomcat Native library which allows using OpenSSL was not found on the java.library.path: [C:\Program Files\Java\jdk-17\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\MinGW\bin;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Program Files\Apache\Maven\apache-maven-3.9.16\bin;C:\Users\krnl\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\krnl\AppData\Local\Programs\Python\Python312\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\krnl\AppData\Local\Microsoft\WindowsApps;C:\Users\krnl\AppData\Local\Programs\Antigravity IDE\bin;C:\Users\krnl\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\krnl\AppData\Roaming\npm;C:\Users\krnl\AppData\Local\Programs\Ollama;C:\Users\krnl\AppData\Local\Microsoft\WinGet\Links;C:\Users\krnl\AppData\Local\Python\bin;C:\Users\krnl\AppData\Local\PowerToys\DSCModules\;.]
+27-Sep-2026 22:02:04.399 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+27-Sep-2026 22:02:04.446 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1073] milliseconds
+27-Sep-2026 22:02:04.541 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+27-Sep-2026 22:02:04.541 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/10.1.59]
+27-Sep-2026 22:02:04.564 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml]
+27-Sep-2026 22:02:04.602 WARNING [main] org.apache.catalina.startup.HostConfig.deployDescriptor The path attribute with value [/WorkingJSP] in deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml] has been ignored
+27-Sep-2026 22:02:05.156 INFO [main] org.apache.catalina.startup.HostConfig.deployDescriptor Deployment of deployment descriptor [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\conf\Catalina\localhost\WorkingJSP.xml] has finished in [590] ms
+27-Sep-2026 22:02:05.158 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs]
+27-Sep-2026 22:02:05.222 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\docs] has finished in [64] ms
+27-Sep-2026 22:02:05.222 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples]
+27-Sep-2026 22:02:05.905 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\examples] has finished in [683] ms
+27-Sep-2026 22:02:05.905 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager]
+27-Sep-2026 22:02:05.984 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\host-manager] has finished in [79] ms
+27-Sep-2026 22:02:05.984 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager]
+27-Sep-2026 22:02:06.030 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\manager] has finished in [46] ms
+27-Sep-2026 22:02:06.030 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT]
+27-Sep-2026 22:02:06.077 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\krnl\Documents\tomcat\apache-tomcat-10.1.59\apache-tomcat-10.1.59\webapps\ROOT] has finished in [47] ms
+27-Sep-2026 22:02:06.086 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+27-Sep-2026 22:02:06.160 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [1701] milliseconds
+27-Sep-2026 22:04:06.123 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+27-Sep-2026 22:04:06.131 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+27-Sep-2026 22:04:06.377 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+27-Sep-2026 22:04:06.443 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+27-Sep-2026 22:04:06.461 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]

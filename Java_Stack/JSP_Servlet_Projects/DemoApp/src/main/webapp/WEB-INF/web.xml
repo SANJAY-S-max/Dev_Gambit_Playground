@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
+  <servlet>
+  		<servlet-name>abc</servlet-name>
+  		<servlet-class>com.sanjay.addServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  		<servlet-name>abc</servlet-name>
+  		<url-pattern>/add</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>MyServlet</servlet-name>
+	<servlet-class>com.sanjay.MyServlet</servlet-class>
+  	<init-param>
+  			<param-name>Name</param-name>
+  			<param-value>SANJAY</param-value>
+  		</init-param>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>MyServlet</servlet-name>
+	<url-pattern>/home</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  		<servlet-name>square</servlet-name>
+  		<servlet-class>com.sanjay.SqServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  		<servlet-name>square</servlet-name>
+  		<url-pattern>/sq</url-pattern>
+  </servlet-mapping>
+  
+  <context-param>
+  	<param-name>name</param-name>
+  	<param-value>Sanjay</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>Phone</param-name>
+  	<param-value>Samsung</param-value>
+  </context-param>
+  
+</web-app>

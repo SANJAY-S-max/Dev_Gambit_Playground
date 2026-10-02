@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<!-- Database connection settings -->
+		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/Students</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">Thilagasanjay</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">
+            org.infinispan.hibernate.cache.v62.InfinispanRegionFactory
+        </property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+		<!-- Registered Entity Mappings -->
+		<mapping class="com.sanjay.Students.Student" />
+		<mapping class="com.sanjay.Students.Laptop" />
+	</session-factory>
+</hibernate-configuration>
