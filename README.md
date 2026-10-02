@@ -1,7 +1,7 @@
 <div align="center">
 
 ```
-♟️  Every move is a lesson. Every project is a gambit.  ♟️
+♟️  Every move is a lesson. Every gambit is a gain.  ♟️
 ```
 
 # ♔ Dev Gambit Playground ♔
@@ -19,11 +19,9 @@
 
 ## ♟️ What Is This Repo?
 
-This is my **personal dev playground** — a chessboard where every folder is a **piece**, every project is a **move**, and every stack I learn is a **strategy**.
+This is my **personal dev playground** — a chessboard where every folder is a **piece**, every exercise is a **move**, and every stack I learn is a **strategy**.
 
-I learn by **watching YouTube tutorials** and coding along — project by project, move by move. Each folder here represents a stack I'm actively learning and practicing.
-
-> 🎯 **Goal:** Become a full-stack developer by making calculated moves — one project at a time.
+Each folder here represents a stack I'm actively exploring and practicing. This is where concepts become code.
 
 ---
 
@@ -33,18 +31,19 @@ I learn by **watching YouTube tutorials** and coding along — project by projec
 Dev_Gambit_Playground/               ← The Chessboard
 │
 ├── ♞ Java_Stack/                    ← Java Pieces (Back-end)
-│   ├── JSP_Servlet_Projects/        ← Web tier: JSP & Servlet projects
-│   ├── Spring_Projects/             ← Spring Framework projects
+│   ├── JSP_Servlet_Projects/        ← Web tier: JSP & Servlet exercises
+│   ├── Spring_Projects/             ← Spring Framework exercises
 │   ├── Hibernate_JPA/               ← ORM & Database mapping
 │   └── Other_Java/                  ← Core Java, DSA, misc Java
 │
 ├── ♝ MERN_Stack/                    ← MERN Pieces (Full-stack JS)
-│   ├── Frontend/                    ← React, HTML/CSS, Tailwind projects
+│   ├── Frontend/                    ← React, HTML/CSS, Tailwind exercises
 │   └── Node_Express/                ← Node.js & Express.js backends
 │
 ├── ♖ tomcat/                        ← The Castle — Tomcat server setup
-│   └── apache-tomcat-*/             ← Tomcat versions used in projects
+│   └── apache-tomcat-*/             ← Tomcat versions
 │
+├── 📥 _Inbox/                       ← Drop new folders here for categorization
 ├── .gitignore                       ← Guards the board (ignored files)
 ├── FOLDER_STRUCTURE.txt             ← The Game Manual (this repo explained)
 └── README.md                        ← The Opening Move (you are here)
@@ -62,50 +61,49 @@ Dev_Gambit_Playground/               ← The Chessboard
 | ♝ Bishop | React / Frontend | 🟢 Active |
 | ♝ Bishop | Node.js & Express | 🟢 Active |
 | ♜ Rook | Apache Tomcat | 🟢 Active |
-| ⬜ Pawn | Next Stack... | 🔜 Coming Soon |
 
 ---
 
 ## ♔ How I Play
 
 ```
-1. Watch YouTube tutorial          → Pick up a piece
-2. Code along with the video       → Make the move
-3. Save project in correct folder  → Record the move
-4. Push to GitHub                  → The game is saved
-5. Repeat                          → Next gambit begins
+1. Pick a concept to explore        → Pick up a piece
+2. Practice and build hands-on      → Make the move
+3. Save in the correct folder       → Record the move
+4. Push to GitHub                   → The game is saved
+5. Repeat                           → Next gambit begins
 ```
 
 ---
 
-## ♛ Projects on the Board
+## ♛ Exercises on the Board
 
 ### ♞ Java Stack
-| Project | Category | Description |
-|---------|----------|-------------|
-| Alien | JSP/Servlet | Servlet practice project |
+| Exercise | Category | Description |
+|----------|----------|-------------|
+| Alien | JSP/Servlet | Servlet fundamentals |
 | DemoApp | JSP/Servlet | Basic demo web app |
 | DemoFilter | JSP/Servlet | Servlet filter implementation |
-| DemoJSP | JSP/Servlet | JSP fundamentals |
-| FileUploadDemo | JSP/Servlet | File upload with servlet |
-| JSTLDemo | JSP/Servlet | JSTL tag library demo |
-| LoginModule | JSP/Servlet | Login/auth module |
-| Students | JSP/Servlet | Student management app |
-| WorkingJSP | JSP/Servlet | Working JSP project |
+| DemoJSP | JSP/Servlet | JSP & EL expressions |
+| FileUploadDemo | JSP/Servlet | File upload with Servlet API |
+| JSTLDemo | JSP/Servlet | JSTL tag library usage |
+| LoginModule | JSP/Servlet | Login & session management |
+| Students | JSP/Servlet | Student management CRUD |
+| WorkingJSP | JSP/Servlet | Complete JSP web exercise |
 
 ### ♝ MERN Stack
-| Project | Category | Description |
-|---------|----------|-------------|
-| Website_using_Tailwindcss | Frontend | First website with Tailwind CSS |
+| Exercise | Category | Description |
+|----------|----------|-------------|
+| Website_using_Tailwindcss | Frontend | Website built with Tailwind CSS |
 | Express basic | Node/Express | Express.js fundamentals |
 | Node Basic | Node/Express | Node.js core concepts |
 
 ---
 
-## ♟️ Opening Principles (Rules I Follow)
+## ♟️ Opening Principles
 
-- 📌 Every project follows the **YouTube tutorial** it came from
-- 📁 Projects are **categorized by stack**, not by date
+- 📁 Exercises are **categorized by stack**, not by date
+- 📥 Drop new folders in `_Inbox/` — they get sorted into the right category
 - 🔄 This repo is **always evolving** — new moves are always being added
 - 🧹 The `.gitignore` keeps the board clean — no IDE clutter
 

@@ -8,12 +8,13 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   This is SANJAY-S-max's personal learning playground.
-  The owner watches YouTube tutorials and codes along with them.
-  Every project/folder here comes directly from a YouTube tutorial.
-  Projects are organized by TECH STACK CATEGORY, not by date.
+  Each folder contains hands-on exercises exploring a specific tech stack.
+  Everything here is concept-driven — understanding how things work by doing.
+  Exercises are organized by TECH STACK CATEGORY, not by date.
 
-  RULE: When a new project/folder is dropped into this repo root,
-  analyze its content and move it into the correct stack category folder.
+  RULE: When a new folder is dropped into _Inbox/, analyze its content
+  and move it into the correct stack category folder. Then update this file
+  and README.md accordingly.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   TOP-LEVEL FOLDER CATEGORIES
@@ -21,12 +22,25 @@
 
   Dev_Gambit_Playground/
   │
-  ├── Java_Stack/           → All Java-related learning projects
-  ├── MERN_Stack/           → All JavaScript full-stack projects (MongoDB, Express, React, Node)
-  ├── tomcat/               → Apache Tomcat server installations used for Java web projects
+  ├── Java_Stack/           → All Java-related learning exercises
+  ├── MERN_Stack/           → All JavaScript full-stack exercises (MongoDB, Express, React, Node)
+  ├── tomcat/               → Apache Tomcat server installations used for Java web exercises
+  ├── _Inbox/               → DROP NEW FOLDERS HERE — AI will analyze and categorize them
   ├── .gitignore            → Git ignore rules (IDE files, binaries, node_modules, etc.)
   ├── FOLDER_STRUCTURE.txt  → THIS FILE — explains repo structure (update when adding folders)
   └── README.md             → GitHub landing page with chess theme
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  _INBOX/ — THE DROP ZONE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  _Inbox/
+  │   → Temporary staging area for new/unsorted folders
+  │   → Drop any new learning folder here
+  │   → AI will analyze its contents and move it to the correct stack folder
+  │   → This folder should always be empty after categorization
+  │
+  └── (drop new folders here — they will be moved automatically)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   JAVA_STACK/ — DETAILED STRUCTURE
@@ -35,38 +49,38 @@
   Java_Stack/
   │
   ├── JSP_Servlet_Projects/
-  │   │   → Java web projects using JSP (JavaServer Pages) and Servlets
+  │   │   → Java web exercises using JSP (JavaServer Pages) and Servlets
   │   │   → Typically run on Apache Tomcat server
   │   │   → Built with Maven (pom.xml present)
   │   │
-  │   ├── Alien/              → Servlet practice project
+  │   ├── Alien/              → Servlet fundamentals
   │   ├── DemoApp/            → Basic demo web application
-  │   ├── DemoFilter/         → Servlet Filter implementation demo
-  │   ├── DemoJSP/            → JSP fundamentals and EL expressions
+  │   ├── DemoFilter/         → Servlet Filter implementation
+  │   ├── DemoJSP/            → JSP & EL expressions
   │   ├── FileUploadDemo/     → File upload using Servlet API
   │   ├── JSTLDemo/           → JSTL (JSP Standard Tag Library) usage
-  │   ├── LoginModule/        → Login and authentication with sessions
-  │   ├── Students/           → Student management CRUD application
-  │   └── WorkingJSP/         → Complete working JSP web project
+  │   ├── LoginModule/        → Login & session management
+  │   ├── Students/           → Student management CRUD
+  │   └── WorkingJSP/         → Complete working JSP web exercise
   │
   ├── Spring_Projects/
-  │   │   → Projects using Spring Framework / Spring Boot
+  │   │   → Exercises using Spring Framework / Spring Boot
   │   │   → REST APIs, MVC, Spring Security, Spring Data JPA
-  │   │   → Typically Maven/Gradle projects with application.properties
+  │   │   → Typically Maven/Gradle with application.properties
   │   │
-  │   └── (add Spring Boot projects here)
+  │   └── (Spring Boot exercises go here)
   │
   ├── Hibernate_JPA/
-  │   │   → ORM projects using Hibernate or Jakarta Persistence API
+  │   │   → ORM exercises using Hibernate or Jakarta Persistence API
   │   │   → Database mapping, JPQL, entity relationships
   │   │
-  │   └── (add Hibernate/JPA projects here)
+  │   └── (Hibernate/JPA exercises go here)
   │
   └── Other_Java/
-      │   → Core Java, DSA (Data Structures & Algorithms), standalone Java apps
+      │   → Core Java, DSA (Data Structures & Algorithms), standalone apps
       │   → Java SE practice, design patterns, console applications
       │
-      └── (add core Java / other Java projects here)
+      └── (Core Java / other Java exercises go here)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   MERN_STACK/ — DETAILED STRUCTURE
@@ -75,13 +89,13 @@
   MERN_Stack/
   │
   ├── Frontend/
-  │   │   → Pure HTML/CSS/JS projects, React projects, Tailwind CSS projects
-  │   │   → UI/UX practice, component building, static websites
+  │   │   → Pure HTML/CSS/JS, React, Tailwind CSS exercises
+  │   │   → UI/UX concepts, component building, static websites
   │   │
-  │   └── Website_using_Tailwindcss/   → First website built with Tailwind CSS
+  │   └── Website_using_Tailwindcss/   → Website built with Tailwind CSS
   │
   └── Node_Express/
-      │   → Backend Node.js and Express.js projects
+      │   → Backend Node.js and Express.js exercises
       │   → REST APIs, middleware, routing, server-side JS
       │
       ├── Node Basic/       → Node.js fundamentals (fs, http, modules)
@@ -93,18 +107,18 @@
 
   tomcat/
   │   → Apache Tomcat server installations
-  │   → Used to run JSP/Servlet and Spring MVC projects locally
-  │   → Multiple versions may exist for different projects
+  │   → Used to run JSP/Servlet and Spring MVC exercises locally
+  │   → Multiple versions may exist for different exercises
   │
   ├── apache-tomcat-10.1.36/           → Tomcat version 10.1.36
   ├── apache-tomcat-10.1.59/           → Tomcat version 10.1.59
   └── apache-tomcat-10.1.60-windows-x64/ → Tomcat version 10.1.60 (Windows)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  HOW TO CATEGORIZE A NEW PROJECT (FOR AI ASSISTANT)
+  HOW TO CATEGORIZE A NEW FOLDER (FOR AI ASSISTANT)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  When a new folder is dropped into the repo root, analyze it and move it:
+  When a new folder appears in _Inbox/, analyze it and move it:
 
   IF contains pom.xml + web.xml + .jsp files
       → Java_Stack/JSP_Servlet_Projects/
@@ -115,7 +129,7 @@
   IF contains pom.xml + persistence.xml OR @Entity classes
       → Java_Stack/Hibernate_JPA/
 
-  IF contains .java files only (no web layer)
+  IF contains .java files only (no web layer, no framework)
       → Java_Stack/Other_Java/
 
   IF contains package.json + React / JSX files (src/App.jsx or App.js)
@@ -130,19 +144,10 @@
   IF contains Tomcat server installation (bin/startup.bat present)
       → tomcat/
 
-  IF a COMPLETELY NEW STACK (e.g., Python, Django, Flask, PHP, etc.)
+  IF a COMPLETELY NEW STACK (e.g., Python, Django, PHP, etc.)
       → Create a NEW top-level folder: e.g., Python_Stack/
       → Update this FOLDER_STRUCTURE.txt with the new stack details
-      → Update README.md stacks table
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  FUTURE STACKS TO ADD (Planned)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  [ ] Python_Stack/      → Python, Django, Flask, FastAPI
-  [ ] DevOps/            → Docker, Kubernetes, CI/CD pipelines
-  [ ] Database/          → SQL practice, MongoDB queries, Redis
-  [ ] DSA/               → Data Structures & Algorithms practice
+      → Update README.md stacks table and folder layout
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   UPDATE LOG
@@ -153,6 +158,7 @@
                           Hibernate_JPA, Other_Java
               MERN_Stack: Frontend, Node_Express
               tomcat: Apache Tomcat 10.1.x installations
+              _Inbox: Drop zone for new folders added
 
   [Add new entries here when new stacks or folders are added]
 
