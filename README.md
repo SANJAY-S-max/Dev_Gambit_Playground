@@ -91,6 +91,8 @@ Dev_Gambit_Playground/               ← The Chessboard
 | Students | JSP/Servlet | Student management CRUD |
 | WorkingJSP | JSP/Servlet | Complete JSP web exercise |
 | ecom-proj | Spring Boot | E-commerce REST API with Spring Boot & MySQL |
+| springSecurity | Spring Boot | Spring Security implementation and examples |
+| SpringOauth2 | Spring Boot | OAuth2 implementation with Spring Boot |
 
 ### ♝ MERN Stack
 | Exercise | Category | Description |

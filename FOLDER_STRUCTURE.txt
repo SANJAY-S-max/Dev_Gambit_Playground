@@ -69,6 +69,8 @@
   │   │   → Typically Maven/Gradle with application.properties
   │   │
   │   ├── ecom-proj/          → E-commerce REST API with Spring Boot
+  │   ├── springSecurity/     → Spring Security implementation and examples
+  │   ├── SpringOauth2/       → OAuth2 implementation with Spring Boot
   │   └── (Spring Boot exercises go here)
   │
   ├── Hibernate_JPA/
