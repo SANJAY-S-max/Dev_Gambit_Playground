@@ -1,0 +1,1632 @@
+================================================================
+  SPRING SECURITY PROJECT - DEEP EXPLANATION FOR BEGINNERS
+  Updated for: Fixed codebase (JWT + BCrypt + Database Auth)
+  Written by: Your AI Teacher
+  Project: com.sanjay.springSecurity
+================================================================
+
+Before anything else, read this one paragraph that explains
+EVERYTHING in simple words:
+
+  "You built a secure REST API. This API has some endpoints
+   that only LOGGED-IN users can see (like /students). A new
+   user registers at /user/register (free, no login needed).
+   Then they LOGIN at /user/login — they send their username
+   and password, you verify it, and give them a JWT TOKEN
+   (like a digital pass). From then on, they add that token
+   to every request header. Spring Security reads the token,
+   verifies it, and lets them access protected endpoints.
+   No passwords sent again after login — just the token!"
+
+That is the whole upgraded project. Now let's go DEEP.
+
+NOTE ABOUT WHAT CHANGED FROM THE PREVIOUS VERSION:
+  OLD approach: HTTP Basic Auth — send username+password EVERY request
+  NEW approach: JWT Tokens — login once, get a token, use token forever
+  Also added: JwtFilter, JWTService, UserService.verify(), AuthenticationManager
+
+================================================================
+PART 1: WHAT HAPPENS WHEN A REQUEST COMES IN?
+         (The Filter System — Very Important!)
+================================================================
+
+When you type a URL in Postman and press Send,
+your request travels like this:
+
+  YOU (Postman)
+        |
+        | sends HTTP request + JWT token in header
+        v
+  ┌─────────────────────────────────────────────────────┐
+  │              YOUR SPRING BOOT APP                   │
+  │                                                     │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │         FILTER CHAIN (Security Checks)       │   │
+  │  │                                              │   │
+  │  │  Filter 1: CorsFilter (cross-origin check)   │   │
+  │  │  Filter 2: ★ JwtFilter ★ (YOUR CUSTOM!)     │   │
+  │  │            → Read "Authorization: Bearer..." │   │
+  │  │            → Extract JWT token               │   │
+  │  │            → Validate token (not expired)    │   │
+  │  │            → Set authentication in context   │   │
+  │  │  Filter 3: UsernamePasswordAuthFilter        │   │
+  │  │  Filter 4: Other Spring Security filters...  │   │
+  │  │                                              │   │
+  │  └──────────────────────┬───────────────────────┘   │
+  │                         |                           │
+  │                         | (only if all filters OK)  │
+  │                         v                           │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │      DISPATCHER SERVLET (Traffic Cop)        │   │
+  │  │  Reads the URL and routes to the right       │   │
+  │  │  Controller method                           │   │
+  │  └──────────────────────┬───────────────────────┘   │
+  │                         |                           │
+  │                         v                           │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │         YOUR CONTROLLER                      │   │
+  │  │  (HelloController / StudentController /      │   │
+  │  │   UserController)                            │   │
+  │  │  This is where YOUR code runs                │   │
+  │  └──────────────────────────────────────────────┘   │
+  └─────────────────────────────────────────────────────┘
+
+KEY POINT:
+  Filters run BEFORE your controller.
+  JwtFilter runs first and reads the JWT token.
+  If token is valid → request is "authenticated".
+  If no token or bad token → Spring returns 401 Unauthorized.
+
+Think of it like:
+  JWT Token = Your Office ID Card
+  JwtFilter = The ID card scanner at the door
+  Controller = Your work desk inside the office
+  You can't reach your desk without scanning your card!
+
+================================================================
+PART 2: WHAT IS JWT? (JSON Web Token)
+================================================================
+
+JWT is a secure "digital pass" that proves who you are.
+
+It looks like this:
+  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5qYXkiLCJpYXQiOjE...
+
+It has THREE parts separated by dots (.):
+
+  PART 1 — HEADER (tells the algorithm used):
+    Base64({ "alg": "HS256", "typ": "JWT" })
+    → eyJhbGciOiJIUzI1NiJ9
+
+  PART 2 — PAYLOAD (the actual data — who you are, when it expires):
+    Base64({ "sub": "sanjay", "iat": 1696000000, "exp": 1696036000 })
+    → eyJzdWIiOiJzYW5qYXkiLCJpYXQiOjE...
+    
+    sub = subject = username
+    iat = issued at = time of creation
+    exp = expiration = when it becomes invalid
+
+  PART 3 — SIGNATURE (proves the token wasn't tampered with):
+    HMAC_SHA256(base64(header) + "." + base64(payload), secretKey)
+    → Only your server knows the secretKey, so only it can make valid tokens!
+
+WHY JWT IS BETTER THAN BASIC AUTH:
+  ❌ Basic Auth: Send username+password in EVERY request
+               If intercepted by hacker → they have your password!
+  ✓ JWT:       Login ONCE → get short-lived token (10 hours)
+               Send only the token in every request
+               Token expires → attacker can't reuse it
+               Even if intercepted → it expires soon
+
+================================================================
+PART 3: FILE-BY-FILE DEEP EXPLANATION (UPDATED)
+================================================================
+
+─────────────────────────────────────────────────────────────
+FILE 1: pom.xml
+─────────────────────────────────────────────────────────────
+
+What is pom.xml?
+  pom.xml is your project's SHOPPING LIST.
+  It tells Maven (the build tool) which libraries to download.
+
+  <parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.4</version>   ← FIXED (was 4.1.1 which doesn't exist)
+  </parent>
+
+  WHY FIXED: Spring Boot 4.1.1 was a typo/mistake. The real
+  latest stable Spring Boot is 3.3.4. Maven couldn't download
+  a version that doesn't exist → BUILD FAILED.
+  Spring Boot 3.x uses Spring Security 6, which is current.
+
+  <dependency>
+    <artifactId>spring-boot-starter-security</artifactId>
+  </dependency>
+  WHY: Adds Spring Security to the app.
+       Instantly locks down ALL endpoints by default.
+
+  <dependency>
+    <artifactId>spring-boot-starter-web</artifactId>  ← FIXED
+  </dependency>
+  WHY FIXED: Was "spring-boot-starter-webmvc" which DOES NOT EXIST
+  as a standalone artifact. The correct one is "spring-boot-starter-web"
+  which internally includes Spring MVC.
+
+  <dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+  </dependency>
+  WHY: Allows Java to communicate with MySQL database.
+       Without this: "Cannot connect to database" error.
+
+  <dependency>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+  </dependency>
+  WHY: JPA (Java Persistence API) = lets you use Java objects
+       to work with the database instead of raw SQL.
+       repo.save(user) → automatically generates INSERT INTO SQL.
+
+  <!-- JWT dependencies — NEW ADDITIONS -->
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.12.6</version>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+  </dependency>
+  WHY THREE JARS?
+    jjwt-api     = The API / interfaces. Your code USES this.
+    jjwt-impl    = The actual implementation behind the scenes.
+    jjwt-jackson = Uses Jackson library to parse/create JSON in JWT.
+    scope=runtime means: needed at runtime but not during compile.
+
+  <!-- Test dependencies — FIXED -->
+  <dependency>
+    <artifactId>spring-boot-starter-test</artifactId>  ← FIXED
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-test</artifactId>  ← FIXED
+    <scope>test</scope>
+  </dependency>
+  WHY FIXED: "spring-boot-starter-security-test" and
+  "spring-boot-starter-webmvc-test" DO NOT EXIST.
+  The real artifacts are "spring-boot-starter-test" (for JUnit, etc.)
+  and "spring-security-test" (for security-specific testing).
+
+─────────────────────────────────────────────────────────────
+FILE 2: application.properties
+─────────────────────────────────────────────────────────────
+
+spring.application.name=springSecurity
+  PURPOSE: Names your app. Appears in logs. Like naming your WiFi.
+
+spring.security.user.name=sanjay
+spring.security.user.password=1234
+  PURPOSE: These are the OLD/DEFAULT Spring Security user settings.
+           Since you now use DATABASE users and JWT, these lines
+           are IGNORED by your app. They do nothing.
+           You can safely delete them. They don't cause errors.
+           They're just leftover from earlier learning stages.
+
+spring.datasource.url=jdbc:mysql://localhost:3306/my_database
+  PURPOSE: WHERE is your MySQL database?
+           localhost = on YOUR computer
+           3306      = MySQL's default port number (like a door number)
+           my_database = the name of the database in MySQL
+  ⚠️ Make sure this database exists in MySQL before starting!
+     CREATE DATABASE my_database;
+
+spring.datasource.username=root
+spring.datasource.password=Thilagasanjay
+  PURPOSE: MySQL login credentials.
+           root = default MySQL admin username.
+  ⚠️ NEVER put real passwords in this file for production apps.
+     Use environment variables or a secrets manager instead.
+
+spring.jpa.hibernate.ddl-auto=update
+  PURPOSE: What happens to database tables when the app starts?
+           "update" = If "users" table doesn't exist → CREATE IT.
+                      If it exists but has new columns → ADD THEM.
+                      If it exists and is same → DO NOTHING.
+  WHY: This auto-creates the "users" table so you don't have to
+       write CREATE TABLE SQL manually. Super helpful for learning!
+
+spring.jpa.show-sql=true
+  PURPOSE: Print all SQL queries to the console.
+           When repo.save(user) runs, you'll see in console:
+           "insert into users (username, password, id) values (?, ?, ?)"
+           Very helpful for understanding what JPA is doing!
+
+─────────────────────────────────────────────────────────────
+FILE 3: SpringSecurityApplication.java
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  package com.sanjay.springSecurity;
+
+  import org.springframework.boot.SpringApplication;
+  import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+  @SpringBootApplication
+  public class SpringSecurityApplication {
+      public static void main(String[] args) {
+          SpringApplication.run(SpringSecurityApplication.class, args);
+      }
+  }
+
+LINE BY LINE:
+
+  @SpringBootApplication
+  PURPOSE: This ONE annotation does THREE things at once:
+           1. @Configuration:
+              "This class has Spring configuration settings."
+           2. @EnableAutoConfiguration:
+              "Automatically configure Spring based on what's in pom.xml."
+              Sees MySQL driver → auto-configures database connection.
+              Sees Spring Security → auto-enables security.
+           3. @ComponentScan:
+              "Scan this package and ALL sub-packages for classes
+               annotated with @Service, @Repository, @Controller,
+               @Component, @RestController, @Configuration."
+              This is how Spring finds and manages all your classes!
+  WITHOUT THIS: Spring doesn't know about any of your classes.
+
+  SpringApplication.run(SpringSecurityApplication.class, args);
+  PURPOSE: This starts the entire Spring ecosystem:
+           - Reads application.properties
+           - Connects to MySQL database
+           - Creates all @Service, @Repository, @Controller objects
+           - Loads JwtFilter into the security filter chain
+           - Starts Tomcat web server on port 8080
+           - Your app is now ready to receive requests!
+
+─────────────────────────────────────────────────────────────
+FILE 4: Users.java (The Database Table Blueprint)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  package com.sanjay.springSecurity.model;
+
+  import jakarta.persistence.Entity;
+  import jakarta.persistence.Id;
+
+  @Entity
+  public class Users {
+      @Id
+      private int id;
+      private String username;
+      private String password;
+
+      public Users() { }
+
+      public Users(int id, String username, String password) { ... }
+
+      // getters, setters, toString
+  }
+
+REAL WORLD EXAMPLE:
+  Think of Users.java as a FORM TEMPLATE.
+  @Entity tells Spring: "Create a database table based on this form."
+  Each field (id, username, password) = one column in the table.
+
+LINE BY LINE:
+
+  @Entity
+  PURPOSE: ★★ VERY IMPORTANT ★★
+           Tells JPA/Hibernate: "Map this Java class to a database table."
+           Spring auto-creates a table called "users" in MySQL.
+           (Java class name "Users" → table name "users")
+           WITHOUT @Entity: Just a plain Java class, no table created.
+           WITH @Entity: MySQL gets a "users" table automatically!
+
+  @Id
+  private int id;
+  PURPOSE: @Id = "This field is the PRIMARY KEY of the table."
+           Primary Key = Unique identifier for each row.
+           Like your bank account number — no two users share it.
+           The MySQL table gets a "id" column marked as PRIMARY KEY.
+
+  NOTE: In the fixed version, we kept int id without @GeneratedValue
+  for simplicity, but the caller (UserController via UserService) must
+  provide a unique id when registering. In real production apps you would
+  add @GeneratedValue(strategy = GenerationType.IDENTITY) so MySQL
+  auto-assigns the next number (1, 2, 3...) automatically.
+
+  private String username;
+  private String password;
+  PURPOSE: These become VARCHAR columns in the users table.
+           "private" = only this class accesses them directly.
+           Outsiders must use getters/setters to read/write.
+
+  public Users() { }
+  PURPOSE: JPA REQUIRES an empty constructor!
+           When JPA reads a row from the database, it:
+           1. Calls Users() to create an empty object
+           2. Calls setUsername("sanjay") to fill username
+           3. Calls setPassword("$2a$...") to fill password
+           If you remove this constructor: JPA throws an error!
+
+─────────────────────────────────────────────────────────────
+FILE 5: Student.java
+─────────────────────────────────────────────────────────────
+
+NOTICE: No @Entity, No @Id here!
+  This means Student is NOT stored in any database.
+  It lives in RAM only. App restarts → student data is GONE.
+  This is intentional — it's just practice for JSON/REST concepts.
+
+The StudentController pre-creates two students in memory:
+  new Student(1, 80, "sanjay")  ← constructor(id, mark, name)
+  new Student(2, 50, "Abi")
+
+These are the same two students you always see at GET /students.
+Adding via POST /students also only adds to RAM — not to MySQL.
+
+─────────────────────────────────────────────────────────────
+FILE 6: UserRepo.java (The Database Helper Interface)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Repository
+  public interface UserRepo extends JpaRepository<Users, Integer> {
+      Users findByUsername(String username);
+  }
+
+REAL WORLD EXAMPLE:
+  Think of UserRepo as a REMOTE CONTROL for your database.
+  Instead of writing SQL yourself, you press method-buttons
+  and it executes the SQL automatically.
+
+LINE BY LINE:
+
+  @Repository
+  PURPOSE: Tells Spring: "This is a database layer class."
+           Spring auto-creates an implementation of this interface
+           and keeps it ready. You just use @Autowired to get it.
+
+  public interface UserRepo
+  PURPOSE: "interface" = just method NAMES, no actual code.
+           Spring Data JPA GENERATES all the actual code at startup.
+           You declare WHAT you want. Spring figures out HOW.
+
+  extends JpaRepository<Users, Integer>
+  PURPOSE: UserRepo INHERITS all these methods FOR FREE:
+           - save(user)      → INSERT or UPDATE
+           - findById(1)     → SELECT WHERE id = 1
+           - findAll()       → SELECT * FROM users
+           - deleteById(1)   → DELETE WHERE id = 1
+           - count()         → SELECT COUNT(*)
+           And 20+ more methods — all working with zero code!
+
+           <Users, Integer> means:
+           - Users = which table we work with
+           - Integer = the type of the primary key (id is int)
+
+  Users findByUsername(String username);
+  PURPOSE: ★★ MAGIC METHOD ★★
+           You just name it correctly and Spring generates the SQL:
+             SELECT * FROM users WHERE username = ?
+           Spring reads: "find" = SELECT, "By" = WHERE, "Username" = column.
+           Returns null if no user found.
+           Returns a Users object if found.
+
+─────────────────────────────────────────────────────────────
+FILE 7: UserPrincipal.java (The Translator/Adaptor)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  public class UserPrincipal implements UserDetails {
+      private Users user;
+
+      public UserPrincipal(Users user) {
+          this.user = user;
+      }
+
+      @Override
+      public Collection<? extends GrantedAuthority> getAuthorities() {
+          return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+      }
+
+      @Override
+      public String getPassword() { return user.getPassword(); }
+
+      @Override
+      public String getUsername() { return user.getUsername(); }
+
+      @Override public boolean isAccountNonExpired()   { return true; }
+      @Override public boolean isAccountNonLocked()    { return true; }
+      @Override public boolean isCredentialsNonExpired(){ return true; }
+      @Override public boolean isEnabled()             { return true; }
+  }
+
+WHY DOES THIS CLASS EXIST?
+  Spring Security only understands the UserDetails interface.
+  Your Users class doesn't implement UserDetails.
+  UserPrincipal is the BRIDGE — it wraps Users and speaks UserDetails.
+
+  ANALOGY: You're Indian, applying for a job in Japan.
+  Japan's HR system only accepts resumes in Japanese format (UserDetails).
+  Your resume is in English (Users class).
+  UserPrincipal = the translator who converts your resume to Japanese.
+
+LINE BY LINE:
+
+  implements UserDetails
+  PURPOSE: Signing a CONTRACT with Spring Security.
+           UserDetails has 7 required methods you MUST implement:
+           - getAuthorities(), getPassword(), getUsername()
+           - isAccountNonExpired(), isAccountNonLocked()
+           - isCredentialsNonExpired(), isEnabled()
+
+  new SimpleGrantedAuthority("ROLE_USER")
+  PURPOSE: ★ FIXED: Was "USER", now correctly "ROLE_USER" ★
+           Spring Security REQUIRES the "ROLE_" prefix.
+           Without the prefix, hasRole("USER") checks won't work.
+           This gives every user the "ROLE_USER" permission level.
+           REAL APPS: Admin users get "ROLE_ADMIN", etc.
+
+  getPassword() { return user.getPassword(); }
+  PURPOSE: Spring Security calls this when verifying login.
+           Returns the BCrypt-hashed password from the Users object.
+           Spring then compares: BCrypt.matches(typed, stored)
+
+  isAccountNonExpired(), isAccountNonLocked(), etc.
+  PURPOSE: Extra account status checks. All return true = everything OK.
+           REAL APPS: Check actual database flags for these values.
+           Here: simplified for learning — always all good.
+
+─────────────────────────────────────────────────────────────
+FILE 8: MyUserDetailsService.java (The Verification Desk)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Service
+  public class MyUserDetailsService implements UserDetailsService {
+
+      @Autowired
+      private UserRepo repo;
+
+      @Override
+      public UserDetails loadUserByUsername(String username)
+              throws UsernameNotFoundException {
+          Users user = repo.findByUsername(username);
+          if (user == null) {
+              System.out.println("User Not Found");
+              throw new UsernameNotFoundException("user not found");
+          }
+          return new UserPrincipal(user);
+      }
+  }
+
+REAL WORLD EXAMPLE:
+  You go to a hotel and say "I have a reservation under Sanjay."
+  The receptionist checks the guest book (database):
+  - Found? → "Yes sir, here is your room key!"
+  - Not found? → "Sorry, no reservation found!"
+  MyUserDetailsService IS that receptionist.
+
+WHEN IS IT CALLED?
+  Two situations:
+  1. DURING LOGIN: JwtFilter reads the token, extracts username,
+     calls loadUserByUsername to get the full user details.
+  2. DURING AUTH PROVIDER: DaoAuthenticationProvider calls it to
+     find and verify the user during the login process.
+  YOU DON'T CALL IT MANUALLY — Spring calls it automatically.
+
+LINE BY LINE:
+
+  implements UserDetailsService
+  PURPOSE: Another contract. UserDetailsService has ONE required method:
+           loadUserByUsername(String username)
+           By implementing it, Spring Security knows to call YOUR
+           implementation when it needs to find a user.
+
+  @Autowired private UserRepo repo;
+  PURPOSE: Dependency Injection.
+           You don't write: UserRepo repo = new UserRepo();
+           Spring automatically creates a UserRepo and "injects" it here.
+           This is the CORE idea of Spring: Spring manages objects.
+
+  repo.findByUsername(username)
+  PURPOSE: Goes to MySQL and runs:
+           SELECT * FROM users WHERE username = 'given_username'
+           Returns Users object if found, null if not found.
+
+  throw new UsernameNotFoundException("user not found")
+  PURPOSE: If user not found, throw this Spring Security exception.
+           Spring Security catches it and returns HTTP 401 Unauthorized.
+           The caller gets "Bad credentials" error.
+
+  return new UserPrincipal(user)
+  PURPOSE: Wrap the Users object in UserPrincipal (the adaptor).
+           Spring Security uses this to get password, roles, etc.
+
+─────────────────────────────────────────────────────────────
+FILE 9: JWTService.java (The JWT Factory) — NEW!
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Service
+  public class JWTService {
+
+      private String secretKey;
+
+      public JWTService() throws NoSuchAlgorithmException {
+          KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
+          SecretKey sK = keyGen.generateKey();
+          secretKey = Base64.getEncoder().encodeToString(sK.getEncoded());
+      }
+
+      public String generateToken(String userName) {
+          Map<String, Object> claims = new HashMap<>();
+          return Jwts.builder()
+                  .claims().add(claims).subject(userName)
+                  .issuedAt(new Date(System.currentTimeMillis()))
+                  .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 10))
+                  .and()
+                  .signWith(getKey())
+                  .compact();
+      }
+
+      private Key getKey() {
+          byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+          return Keys.hmacShaKeyFor(keyBytes);
+      }
+
+      public String extractUserName(String token) {
+          return extractClaim(token, Claims::getSubject);
+      }
+
+      public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+          final Claims claims = extractAllClaims(token);
+          return claimsResolver.apply(claims);
+      }
+
+      private Claims extractAllClaims(String token) {
+          return Jwts.parser()
+                  .verifyWith((SecretKey) getKey())
+                  .build()
+                  .parseSignedClaims(token)
+                  .getPayload();
+      }
+
+      public boolean validateToken(String token, UserDetails userDetails) {
+          final String userName = extractUserName(token);
+          return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+      }
+
+      private boolean isTokenExpired(String token) {
+          return extractExpiration(token).before(new Date());
+      }
+
+      private Date extractExpiration(String token) {
+          return extractClaim(token, Claims::getExpiration);
+      }
+  }
+
+REAL WORLD EXAMPLE:
+  Think of JWTService as a BANK THAT ISSUES ATM CARDS.
+  generateToken() = "Here is your ATM card (JWT token)"
+  validateToken() = "Let me verify this ATM card is real and not expired"
+  extractUserName() = "Let me see whose name is on the card"
+
+LINE BY LINE:
+
+  private String secretKey;
+  PURPOSE: The private signing key for JWT tokens.
+           This key PROVES the token came from YOUR server.
+           If an attacker makes a fake token, they can't sign it
+           correctly without knowing this secret key.
+           IMPORTANT: This key is regenerated every time the app
+           restarts. So old tokens become invalid after restart.
+           In production: Store this key in a fixed config/env variable!
+
+  KeyGenerator.getInstance("HmacSHA256")
+  PURPOSE: Creates a random cryptographic key generator using
+           HmacSHA256 algorithm (a very strong signing algorithm).
+           "Hmac" = Hash-based Message Authentication Code.
+           "SHA256" = Secure Hash Algorithm 256-bit.
+
+  Base64.getEncoder().encodeToString(sK.getEncoded())
+  PURPOSE: Converts the binary secret key into a safe text string.
+           Base64 is a way to represent binary data as plain text.
+           Like converting a photo (binary) to text for email attachment.
+
+  Jwts.builder()
+  PURPOSE: Start building a JWT token using the JJWT library.
+
+  .claims().add(claims)
+  PURPOSE: Add extra data (claims) to the token.
+           Here "claims" is empty (HashMap) — no extra data.
+           In real apps you might add: user roles, user email, etc.
+
+  .subject(userName)
+  PURPOSE: Set the "sub" (subject) field in the token = the username.
+           This is WHO this token belongs to.
+           Example: sub = "sanjay"
+
+  .issuedAt(new Date(System.currentTimeMillis()))
+  PURPOSE: Record WHEN the token was created.
+           "iat" field in JWT = issued at.
+           Example: iat = 1696000000 (Unix timestamp)
+
+  .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 10))
+  ★ FIXED BUG ★
+  PURPOSE: Set WHEN the token expires.
+           1000L * 60 * 60 * 10 = 10 hours in milliseconds
+           (1000ms = 1s, 60s = 1min, 60min = 1hr, 10hr)
+           Why "L"? Forces Java to use long (64-bit) instead of int (32-bit).
+           Without L: int * int * int * int → INTEGER OVERFLOW → WRONG TIME!
+           With L: everything calculated as long → CORRECT!
+
+           OLD CODE BUG: System.currentTimeMillis() * 60 * 60 * 10
+           This MULTIPLIED the current timestamp instead of ADDING!
+           Current time is ~1.7 trillion milliseconds.
+           1.7 trillion * 60 * 60 * 10 = ASTRONOMICAL number → broken!
+
+  .and().signWith(getKey())
+  PURPOSE: Digitally sign the token with our secret key.
+           This is the MAGIC of JWT security.
+           Anyone can READ the token (it's Base64, not encrypted).
+           But NO ONE can MODIFY it without breaking the signature.
+           If they change even ONE character → signature mismatch → rejected!
+
+  .compact()
+  PURPOSE: Finalize and return the complete JWT string.
+           Returns something like:
+           "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5qYXkiLCJpYXQiO..."
+
+  ★ REMOVED BUG ★ — The old code had:
+    return Jwts.builder()...compact();   ← first return
+    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";  ← second return!
+    This is UNREACHABLE CODE — Java never reaches it.
+    It's also hardcoded nonsense. Compile error! Removed it.
+
+  extractUserName(String token)
+  ★ FIXED ★ — Was: return "";  (hardcoded empty string!)
+  NOW: return extractClaim(token, Claims::getSubject);
+  PURPOSE: Actually read the "sub" field from the JWT.
+           Claims::getSubject is a method reference.
+           It means: "call the getSubject() method on the Claims object."
+           The extracted username is used by JwtFilter to identify the user.
+
+  extractClaim(token, Function<Claims, T> claimsResolver)
+  PURPOSE: Generic helper method to extract ANY claim from a JWT.
+           "Function<Claims, T>" = a function that takes Claims and returns T.
+           This makes the code reusable — same method can extract
+           username, expiration date, or any other claim.
+
+  extractAllClaims(String token)
+  PURPOSE: Parses and verifies the JWT token.
+           Jwts.parser() = Start the parser.
+           .verifyWith(key) = Use our secret key to verify signature.
+           .build() = Build the parser.
+           .parseSignedClaims(token) = Parse and verify the token.
+           If the signature is wrong → throws an exception → 401!
+           .getPayload() = Get the claims (the data inside).
+
+  validateToken(String token, UserDetails userDetails)
+  ★ FIXED ★ — Was: return true; (always true = no security at all!)
+  NOW: Checks BOTH:
+       1. userName.equals(userDetails.getUsername())
+          = "Does the token's username match the expected username?"
+       2. !isTokenExpired(token)
+          = "Is the token NOT expired?"
+  Only returns true if BOTH conditions pass. Real security now!
+
+  isTokenExpired(String token)
+  PURPOSE: Get the "exp" (expiration) date from the token.
+           Compare it with NOW (new Date()).
+           If expiration is BEFORE now → token is expired → false → reject!
+
+─────────────────────────────────────────────────────────────
+FILE 10: JwtFilter.java (The JWT Interceptor) — NEW!
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Component   ← FIXED: was missing!
+  public class JwtFilter extends OncePerRequestFilter {
+
+      @Autowired
+      private JWTService jwtService;
+
+      @Autowired
+      ApplicationContext context;
+
+      @Override
+      protected void doFilterInternal(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      FilterChain filterChain)
+              throws ServletException, IOException {
+
+          String authHeader = request.getHeader("Authorization");
+          String token = null;
+          String username = null;
+
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              token = authHeader.substring(7);
+              username = jwtService.extractUserName(token);
+          }
+
+          if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+              UserDetails userDetails = context.getBean(MyUserDetailsService.class)
+                                               .loadUserByUsername(username);
+
+              if (jwtService.validateToken(token, userDetails)) {  ← FIXED: was missing ')'
+                  UsernamePasswordAuthenticationToken authToken =
+                      new UsernamePasswordAuthenticationToken(
+                          userDetails, null, userDetails.getAuthorities());
+                  authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                  SecurityContextHolder.getContext().setAuthentication(authToken);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }
+
+REAL WORLD EXAMPLE:
+  JwtFilter is like the ID CARD SCANNER at every office door.
+  Every single request walks through this filter.
+  Filter checks: "Do you have a valid ID card (JWT token)?"
+  Yes, valid → let through, mark as "authenticated"
+  No or expired → let through as "not authenticated" (Spring will reject later)
+
+CRITICAL BUGS FIXED IN THIS FILE:
+
+  ★ ADDED @Component ★
+  WHY CRITICAL: Without @Component, Spring does NOT manage this class.
+  Without Spring managing it, the @Autowired fields (jwtService, context)
+  are NEVER injected. They stay null.
+  When doFilterInternal runs → NullPointerException!
+  Also: SecurityConfig uses @Autowired JwtFilter.
+  If Spring doesn't know about JwtFilter → "No qualifying bean found" ERROR!
+  FIX: Added @Component so Spring registers and manages this class.
+
+  ★ FIXED SYNTAX ERROR on line 38 ★
+  BEFORE: if(jwtService.validateToken(token,userDetails){
+          ← Missing closing ')' before '{'!
+  This is a COMPILE ERROR — the project cannot even START.
+  AFTER:  if (jwtService.validateToken(token, userDetails)) {
+          ← Correct parentheses.
+
+LINE BY LINE:
+
+  extends OncePerRequestFilter
+  PURPOSE: This makes JwtFilter run exactly ONCE per request.
+           Without "Once" guarantee, some filters can run multiple
+           times (e.g., for forwarding within the app).
+           OncePerRequestFilter prevents that headache.
+
+  @Autowired private JWTService jwtService;
+  PURPOSE: Inject the JwtService to use for token operations.
+           (generateToken, validateToken, extractUserName)
+
+  @Autowired ApplicationContext context;
+  PURPOSE: ApplicationContext = Spring's object warehouse.
+           You can get any managed bean from it.
+           Used here to get MyUserDetailsService.
+           WHY NOT @Autowired MyUserDetailsService directly?
+           Because that would create a CIRCULAR DEPENDENCY:
+           SecurityConfig → JwtFilter → MyUserDetailsService → UserRepo
+           is fine. But @Autowired circular loops can cause issues.
+           Using context.getBean() breaks the direct dependency cycle.
+
+  String authHeader = request.getHeader("Authorization");
+  PURPOSE: Read the "Authorization" header from the incoming HTTP request.
+           When logged in, Postman sends:
+           Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
+           This line reads that header value.
+
+  if (authHeader != null && authHeader.startsWith("Bearer ")) {
+  PURPOSE: Two checks:
+           1. authHeader != null = "Was an Authorization header sent?"
+              If no header → this is a public endpoint or unauth request.
+           2. authHeader.startsWith("Bearer ") = "Is it a JWT token?"
+              JWT tokens always come with "Bearer " prefix.
+              "Bearer " = "I am carrying this token on behalf of a user"
+              (Bearer is a standard term in HTTP authentication specs)
+
+  token = authHeader.substring(7);
+  PURPOSE: Remove "Bearer " (7 characters) from the start.
+           "Bearer eyJhbGc..." → "eyJhbGc..."
+           Now we have just the JWT token string.
+
+  username = jwtService.extractUserName(token);
+  PURPOSE: Parse the JWT and read the "sub" claim (username).
+           Now we know WHO this token belongs to.
+
+  if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+  PURPOSE: Two checks before doing authentication:
+           1. username != null = "Did we successfully extract a username from token?"
+           2. getAuthentication() == null = "Is this request NOT already authenticated?"
+              Don't re-authenticate if it's already done. Efficiency + safety.
+
+  context.getBean(MyUserDetailsService.class).loadUserByUsername(username)
+  PURPOSE: Load full user details from the database for that username.
+           Even though we read the username from the token, we ALSO
+           load the user from DB to verify they still exist and get
+           the correct password hash and roles.
+
+  jwtService.validateToken(token, userDetails)
+  PURPOSE: Final check — is the token valid?
+           1. Does the username in token match the DB user? ✓
+           2. Is the token not expired? ✓
+           Only if BOTH are true → mark request as authenticated.
+
+  new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities())
+  PURPOSE: Create an "authentication object" for Spring Security.
+           Param 1: userDetails = who is authenticated
+           Param 2: null = no credentials (we don't need them now)
+           Param 3: authorities = their roles (ROLE_USER)
+
+  authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request))
+  PURPOSE: Add extra request details (like IP address) to the
+           authentication object. Used for audit logging.
+
+  SecurityContextHolder.getContext().setAuthentication(authToken)
+  PURPOSE: ★ CRITICAL ★
+           "Put the authentication object into Spring's Security Context."
+           SecurityContext = Spring's in-memory holder for "who is currently logged in."
+           Once you set authentication here, Spring Security knows this
+           request is authenticated. ALL security checks later in the
+           chain will see this user as logged in.
+
+  filterChain.doFilter(request, response)
+  PURPOSE: "Okay, I'm done checking. Pass the request to the next filter."
+           IMPORTANT: This MUST be called whether authentication succeeded
+           or not. If you don't call it → the request is stuck, no response!
+
+─────────────────────────────────────────────────────────────
+FILE 11: SecurityConfig.java (The Rulebook) — UPDATED
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Configuration
+  @EnableWebSecurity
+  public class SecurityConfig {
+
+      @Autowired
+      private UserDetailsService userDetailsService;
+
+      @Autowired
+      private JwtFilter jwtFilter;  ← FIXED: added semicolon!
+
+      @Bean
+      public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+          return http
+              .csrf(AbstractHttpConfigurer::disable)
+              .authorizeHttpRequests(request ->
+                  request
+                      .requestMatchers("/user/register", "/user/login").permitAll()
+                      .anyRequest().authenticated()
+              )
+              .httpBasic(Customizer.withDefaults())
+              .sessionManagement(session ->
+                  session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+              )
+              .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+              .build();
+      }
+
+      @Bean
+      public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+              throws Exception {  ← FIXED: added throws Exception
+          return config.getAuthenticationManager();
+      }
+
+      @Bean
+      public AuthenticationProvider authenticationProvider() {
+          DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+          provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
+          return provider;
+      }
+  }
+
+BUGS FIXED IN THIS FILE:
+
+  ★ FIXED: Missing semicolon after "private JwtFilter jwtFilter" ★
+  BEFORE: private JwtFilter jwtFilter   ← no semicolon = COMPILE ERROR!
+  AFTER:  private JwtFilter jwtFilter;  ← correct!
+
+  ★ FIXED: Missing "throws Exception" in authenticationManager ★
+  BEFORE: public AuthenticationManager authenticationManager(AuthenticationConfiguration config){
+          ← getAuthenticationManager() throws a checked Exception.
+          Java REQUIRES you to declare checked exceptions with "throws".
+          Not declaring it = COMPILE ERROR!
+  AFTER:  ...config) throws Exception {  ← correct!
+
+  ★ FIXED: Wrong login URL in requestMatchers ★
+  BEFORE: .requestMatchers("/user/register","login")
+          "login" is missing the leading "/" → Spring Security won't match!
+          Also, login endpoint is at /user/login (under /user mapping).
+  AFTER:  .requestMatchers("/user/register", "/user/login")
+          Now BOTH register and login are public (no authentication needed).
+          Makes sense: you can't login if login itself is blocked!
+
+LINE BY LINE:
+
+  @Configuration
+  PURPOSE: "This class contains Spring bean definitions."
+           Spring reads this class when starting up.
+
+  @EnableWebSecurity
+  PURPOSE: "Activate Spring Security for this web application."
+           Without this: Your SecurityFilterChain bean is ignored!
+           Spring Security wouldn't be enabled.
+
+  @Autowired private UserDetailsService userDetailsService;
+  PURPOSE: Inject MyUserDetailsService (which implements UserDetailsService).
+           Spring finds the class that implements the interface and injects it.
+           WHY UserDetailsService interface instead of MyUserDetailsService?
+           "Programming to interface" — good practice. Decoupled code.
+
+  @Autowired private JwtFilter jwtFilter;
+  PURPOSE: Inject our custom JWT filter so we can add it to the chain.
+           Because JwtFilter has @Component, Spring manages it.
+           @Autowired gets the Spring-managed instance here.
+
+  .csrf(AbstractHttpConfigurer::disable)
+  PURPOSE: Disable CSRF (Cross-Site Request Forgery) protection.
+           For REST APIs tested with Postman → safe to disable.
+           For browser-based web apps → keep it ON!
+           AbstractHttpConfigurer::disable = method reference to the disable() method.
+
+  .requestMatchers("/user/register", "/user/login").permitAll()
+  PURPOSE: These two endpoints are PUBLIC — no authentication needed.
+           /user/register → Anyone can create an account
+           /user/login    → Anyone can log in (to get a token)
+           Without this: login itself would return 401 → impossible to login!
+
+  .anyRequest().authenticated()
+  PURPOSE: EVERY other URL requires a valid JWT token.
+           Order is important: specific rules first (permitAll),
+           then catch-all (.anyRequest) last.
+
+  .httpBasic(Customizer.withDefaults())
+  PURPOSE: Keep HTTP Basic Auth as a fallback login method.
+           (With JWT, the real login goes through /user/login endpoint)
+
+  .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+  PURPOSE: Don't create or use sessions.
+           JWT = stateless by design.
+           Every request is independent — carries its own token.
+           Server doesn't remember anyone between requests.
+
+  .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+  PURPOSE: ★ KEY LINE ★
+           Add our JwtFilter to the security filter chain.
+           "addFilterBefore" = Run JwtFilter BEFORE the standard
+           UsernamePasswordAuthenticationFilter.
+           WHY BEFORE: We need to extract and set authentication from JWT
+           BEFORE Spring Security's default filter checks for credentials.
+           If JWT auth is already set → Spring's filter skips credential check.
+
+  @Bean AuthenticationManager
+  PURPOSE: Creates and exposes the AuthenticationManager bean.
+           UserService uses this to verify username+password during login.
+           Without this @Bean, UserService cannot @Autowired it!
+           config.getAuthenticationManager() → throws Exception → need "throws Exception"!
+
+  @Bean AuthenticationProvider
+  PURPOSE: Configures HOW Spring verifies login credentials.
+           DaoAuthenticationProvider = database-backed authentication.
+           new DaoAuthenticationProvider(userDetailsService)
+           = "Load user info using our MyUserDetailsService"
+           .setPasswordEncoder(BCryptPasswordEncoder(12))
+           = "Passwords are stored as BCrypt hashes, strength 12"
+           During login: BCrypt.matches(typedPassword, storedHash) is checked.
+
+─────────────────────────────────────────────────────────────
+FILE 12: UserService.java (Registration + Login Logic) — UPDATED
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Service
+  public class UserService {
+
+      @Autowired private UserRepo repo;
+      @Autowired private JWTService jwtService;
+      @Autowired private AuthenticationManager authManager;
+
+      private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+      public Users register(Users user) {
+          user.setPassword(encoder.encode(user.getPassword()));
+          return repo.save(user);
+      }
+
+      public String verify(Users user) {
+          Authentication authentication = authManager.authenticate(  ← FIXED type
+              new UsernamePasswordAuthenticationToken(
+                  user.getUsername(), user.getPassword()
+              )
+          );
+          if (authentication.isAuthenticated()) {
+              return jwtService.generateToken(user.getUsername());  ← FIXED: added argument
+          } else {
+              return "Fail";
+          }
+      }
+  }
+
+BUGS FIXED IN THIS FILE:
+
+  ★ FIXED: Wrong variable type ★
+  BEFORE: AuthenticationManager authentication = authManager.authenticate(...)
+          authManager.authenticate() returns Authentication, NOT AuthenticationManager!
+          Authentication ≠ AuthenticationManager (completely different types!)
+          Compile error: cannot convert Authentication to AuthenticationManager.
+  AFTER:  Authentication authentication = authManager.authenticate(...)
+          Correct type. Authentication holds the result of authentication attempt.
+
+  ★ FIXED: generateToken() called without argument ★
+  BEFORE: return jwtService.generateToken();
+          generateToken() requires a String userName parameter!
+          No-arg call → Compile error: "cannot find symbol"
+  AFTER:  return jwtService.generateToken(user.getUsername())
+          Passes the username so the token is personalized to the user.
+
+LINE BY LINE:
+
+  @Autowired private AuthenticationManager authManager;
+  PURPOSE: AuthenticationManager is the component that VERIFIES
+           username+password. We use it in verify() for login.
+           This bean is provided by the SecurityConfig @Bean method.
+           Without the @Bean in SecurityConfig → @Autowired fails!
+
+  private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+  PURPOSE: The password hasher.
+           "12" = strength/rounds of hashing.
+           MUST MATCH the encoder in SecurityConfig!
+           If SecurityConfig uses BCryptPasswordEncoder(10) but
+           UserService uses BCryptPasswordEncoder(12) → login will always fail!
+           WHY? Different rounds produce different hashes for same password.
+
+  user.setPassword(encoder.encode(user.getPassword()))
+  PURPOSE: Hash the password before saving.
+           NEVER store plain text passwords in a database!
+           "1234" → "$2a$12$hQ...longRandomHash"
+           Once hashed: CANNOT be reversed to "1234".
+           Only way to verify: hash again and compare.
+           encoder.encode() uses BCrypt internally.
+
+  authManager.authenticate(
+      new UsernamePasswordAuthenticationToken(username, password)
+  )
+  PURPOSE: "Ask the AuthenticationManager to verify these credentials."
+           Internally, it calls:
+           1. MyUserDetailsService.loadUserByUsername(username) → find user from DB
+           2. BCrypt.matches(typedPassword, storedHash) → check password
+           If both pass → returns an authenticated Authentication object.
+           If fails → throws BadCredentialsException → Spring returns 401.
+
+  authentication.isAuthenticated()
+  PURPOSE: "Was authentication successful?"
+           If yes → generate JWT token and return it.
+           If no → return "Fail".
+           NOTE: If authentication fails, authManager.authenticate()
+           actually throws an exception before reaching this check.
+           The if/else is a safety net for edge cases.
+
+  jwtService.generateToken(user.getUsername())
+  PURPOSE: Create a signed JWT token for this user.
+           The token is returned to the client (in Postman response body).
+           Client saves this token and sends it with every future request!
+
+─────────────────────────────────────────────────────────────
+FILE 13: UserController.java (REST Endpoints)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @RestController
+  @RequestMapping("/user")
+  @CrossOrigin("*")
+  public class UserController {
+
+      @Autowired
+      private UserService service;
+
+      @PostMapping("/register")
+      public Users register(@RequestBody Users user) {
+          return service.register(user);
+      }
+
+      @PostMapping("/login")
+      public String login(@RequestBody Users user) {
+          return service.verify(user);
+      }
+  }
+
+LINE BY LINE:
+
+  @RestController
+  PURPOSE: "This class handles HTTP requests and returns data (JSON/text)."
+           Combination of @Controller + @ResponseBody.
+
+  @RequestMapping("/user")
+  PURPOSE: Base URL prefix for all methods in this class.
+           @PostMapping("/register") → full URL = POST /user/register
+           @PostMapping("/login")    → full URL = POST /user/login
+
+  @CrossOrigin("*")
+  PURPOSE: Allow requests from ANY origin (website/app).
+           Browsers block cross-origin requests by default.
+           Example: React app at localhost:3000 calls Spring at localhost:8080.
+           Browser blocks this. @CrossOrigin("*") allows it.
+           ⚠️ In production: restrict to specific domains!
+
+  @PostMapping("/register")
+  public Users register(@RequestBody Users user)
+  PURPOSE: Register a new user.
+           @RequestBody = Read JSON from request body and convert to Users.
+           You send: {"id": 1, "username": "sanjay", "password": "S@123"}
+           Spring converts it to: Users{id=1, username="sanjay", password="S@123"}
+           Then service.register(user) hashes the password and saves to DB.
+           PUBLIC endpoint (permitAll in SecurityConfig). No token needed.
+
+  @PostMapping("/login")
+  public String login(@RequestBody Users user)
+  PURPOSE: Login and get a JWT token.
+           You send: {"username": "sanjay", "password": "S@123"}
+           service.verify(user) checks the credentials.
+           If valid → returns a JWT token string.
+           You copy that token and use it in all future requests.
+           PUBLIC endpoint (permitAll in SecurityConfig). No token needed.
+
+─────────────────────────────────────────────────────────────
+FILE 14: HelloController.java
+─────────────────────────────────────────────────────────────
+
+  @RestController
+  public class HelloController {
+      @GetMapping("/")
+      public String hello(HttpServletRequest req) {
+          return "Hola hole" + req.getSession().getId();
+      }
+  }
+
+  GET / → Protected! Must send valid JWT token.
+  Returns session ID just to show that a session object exists even
+  in STATELESS mode (it's a request-scoped temporary session).
+  PROTECTED: Requires valid JWT token in Authorization header.
+
+─────────────────────────────────────────────────────────────
+FILE 15: StudentController.java
+─────────────────────────────────────────────────────────────
+
+  @RestController
+  public class StudentController {
+      private List<Student> students = new ArrayList<>(List.of(
+          new Student(1, 80, "sanjay"),
+          new Student(2, 50, "Abi")
+      ));
+
+      @GetMapping("/students")    → PROTECTED (needs JWT token)
+      @GetMapping("/csrf-token")  → PROTECTED (returns null since CSRF is off)
+      @PostMapping("/students")   → PROTECTED (needs JWT token)
+  }
+
+  All endpoints here are PROTECTED. You must send a valid JWT token
+  in the Authorization: Bearer <token> header.
+
+================================================================
+PART 4: COMPLETE JWT FLOW — THREE SCENARIOS
+================================================================
+
+─────────────────────────────────────────────────────────────
+SCENARIO A: REGISTER A NEW USER
+─────────────────────────────────────────────────────────────
+
+Step 1: Postman sends:
+  POST http://localhost:8080/user/register
+  Body: {"id": 1, "username": "sanjay", "password": "S@123"}
+
+Step 2: Request hits JwtFilter.
+  JwtFilter checks "Authorization" header.
+  No header found → username = null → Skip JWT processing.
+  filterChain.doFilter() → pass to next filter.
+
+Step 3: Spring Security checks rules.
+  SecurityConfig: "/user/register" → permitAll() → No authentication needed.
+  Request ALLOWED through.
+
+Step 4: UserController.register() is called.
+  @RequestBody parses JSON → Users{id=1, username="sanjay", password="S@123"}
+  Calls service.register(user).
+
+Step 5: UserService.register() runs.
+  encoder.encode("S@123") → "$2a$12$randomhash..."
+  user.setPassword("$2a$12$randomhash...")
+  repo.save(user) → INSERT INTO users (id, username, password)
+                    VALUES (1, 'sanjay', '$2a$12$randomhash...')
+
+Step 6: MySQL saves the user. Returns saved Users object.
+
+Step 7: UserController returns Users object → converted to JSON:
+  {"id": 1, "username": "sanjay", "password": "$2a$12$randomhash..."}
+  ⚠️ In real apps, don't return the password in the response!
+
+─────────────────────────────────────────────────────────────
+SCENARIO B: LOGIN AND GET JWT TOKEN
+─────────────────────────────────────────────────────────────
+
+Step 1: Postman sends:
+  POST http://localhost:8080/user/login
+  Body: {"username": "sanjay", "password": "S@123"}
+
+Step 2: JwtFilter runs. No Authorization header → skip JWT check.
+
+Step 3: SecurityConfig: "/user/login" → permitAll() → allowed through.
+
+Step 4: UserController.login() → service.verify(user).
+
+Step 5: UserService.verify() runs.
+  authManager.authenticate(
+      new UsernamePasswordAuthenticationToken("sanjay", "S@123")
+  )
+
+Step 6: AuthenticationManager internally calls:
+  → MyUserDetailsService.loadUserByUsername("sanjay")
+  → repo.findByUsername("sanjay")
+  → SQL: SELECT * FROM users WHERE username = 'sanjay'
+  → Found: Users{id=1, username="sanjay", password="$2a$12$randomhash..."}
+  → Returns new UserPrincipal(user)
+
+Step 7: AuthenticationManager verifies password:
+  BCrypt.matches("S@123", "$2a$12$randomhash...") → TRUE ✓
+  Authentication successful!
+
+Step 8: authentication.isAuthenticated() → true.
+  jwtService.generateToken("sanjay") creates JWT:
+  Header: {"alg": "HS256"}
+  Payload: {"sub": "sanjay", "iat": <now>, "exp": <10 hours later>}
+  Signed with secret key.
+  Returns: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5qYXkiLCJpYXQiOjE..."
+
+Step 9: Postman shows the JWT token in the response body.
+  YOU MUST COPY THIS TOKEN!
+  Use it in all future requests.
+
+─────────────────────────────────────────────────────────────
+SCENARIO C: ACCESS PROTECTED ENDPOINT WITH JWT TOKEN
+─────────────────────────────────────────────────────────────
+
+Step 1: Postman sends:
+  GET http://localhost:8080/students
+  Header: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5qYXki...
+
+Step 2: JwtFilter.doFilterInternal() runs.
+  authHeader = "Bearer eyJhbGciOiJIUzI1NiJ9..."
+  token = "eyJhbGciOiJIUzI1NiJ9..."
+  username = jwtService.extractUserName(token) → "sanjay"
+
+Step 3: username != null AND authentication is null in context.
+  userDetails = context.getBean(MyUserDetailsService.class)
+                       .loadUserByUsername("sanjay")
+  → Loads sanjay from database → UserPrincipal{username="sanjay", ...}
+
+Step 4: jwtService.validateToken(token, userDetails)
+  → extractUserName(token) = "sanjay"
+  → "sanjay".equals(userDetails.getUsername()) → TRUE ✓
+  → isTokenExpired(token) → FALSE (not expired) ✓
+  → validateToken returns TRUE.
+
+Step 5: UsernamePasswordAuthenticationToken created.
+  SecurityContextHolder.getContext().setAuthentication(authToken)
+  Request is now marked as AUTHENTICATED.
+
+Step 6: filterChain.doFilter() → passes to next filter and eventually to controller.
+
+Step 7: Spring Security checks: is request authenticated?
+  YES → allow through.
+
+Step 8: StudentController.getStudents() runs.
+  Returns the student list.
+
+Step 9: Postman shows:
+  [{"id":1,"name":"sanjay","mark":80}, {"id":2,"name":"Abi","mark":50}]
+
+─────────────────────────────────────────────────────────────
+SCENARIO D: EXPIRED TOKEN
+─────────────────────────────────────────────────────────────
+
+Same as Scenario C, but token was created 11 hours ago.
+
+Step 4: jwtService.validateToken(token, userDetails)
+  → isTokenExpired(token) → TRUE (expiration time is before now)
+  → validateToken returns FALSE.
+
+Step 5: Authentication is NOT set in SecurityContextHolder.
+
+Step 6: Spring Security checks: is request authenticated?
+  NO → 401 Unauthorized!
+
+Postman shows: 401 Unauthorized.
+Solution: Login again to get a fresh token.
+
+─────────────────────────────────────────────────────────────
+SCENARIO E: WRONG PASSWORD DURING LOGIN
+─────────────────────────────────────────────────────────────
+
+Step 5: UserService.verify() calls:
+  authManager.authenticate(new UsernamePasswordAuthenticationToken("sanjay", "wrongpass"))
+
+Step 6: BCrypt.matches("wrongpass", "$2a$12$randomhash...") → FALSE.
+  AuthenticationManager throws: BadCredentialsException!
+
+Step 7: UserService doesn't catch this exception.
+  Spring Security handles it: returns 401 Unauthorized.
+
+Postman shows: 401 Unauthorized.
+
+================================================================
+PART 5: ALL BUGS FIXED (Summary)
+================================================================
+
+  BUG 1: pom.xml — Spring Boot version 4.1.1 doesn't exist
+          Fix: Changed to 3.3.4
+
+  BUG 2: pom.xml — "spring-boot-starter-webmvc" doesn't exist
+          Fix: Changed to "spring-boot-starter-web"
+
+  BUG 3: pom.xml — "spring-boot-starter-security-test" doesn't exist
+          Fix: Changed to "spring-security-test"
+
+  BUG 4: pom.xml — "spring-boot-starter-webmvc-test" doesn't exist
+          Fix: Changed to "spring-boot-starter-test"
+
+  BUG 5: JwtFilter.java — Missing @Component
+          Fix: Added @Component so Spring registers and manages the bean.
+          Without this: @Autowired in JwtFilter doesn't work → NullPointerException!
+
+  BUG 6: JwtFilter.java — Syntax error: missing ')' before '{'
+          if(jwtService.validateToken(token,userDetails){  ← WRONG!
+          Fix: if (jwtService.validateToken(token, userDetails)) {
+
+  BUG 7: JwtFilter.java — Unused wrong import
+          import UsernamePasswordAuthenticationFilter (never used)
+          Fix: Removed the unused import (kept code clean).
+
+  BUG 8: SecurityConfig.java — Missing semicolon
+          private JwtFilter jwtFilter   ← COMPILE ERROR!
+          Fix: private JwtFilter jwtFilter;
+
+  BUG 9: SecurityConfig.java — Wrong login URL
+          .requestMatchers("/user/register","login")
+          "login" missing "/" → won't match! Also wrong path.
+          Fix: .requestMatchers("/user/register", "/user/login")
+
+  BUG 10: SecurityConfig.java — Missing throws Exception
+           public AuthenticationManager authenticationManager(...)
+           getAuthenticationManager() throws a checked Exception!
+           Java requires declaring checked exceptions. Without "throws Exception"
+           → COMPILE ERROR!
+           Fix: Added throws Exception.
+
+  BUG 11: JWTService.java — Unreachable code
+           return Jwts.builder()...compact();
+           return "hardcodedToken";  ← UNREACHABLE! Java never reaches here.
+           Also: hardcoded token = security disaster.
+           Fix: Removed the second return statement.
+
+  BUG 12: JWTService.java — Wrong expiration (integer overflow)
+           .expiration(new Date(System.currentTimeMillis() * 60 * 60 * 10))
+           currentTimeMillis() ≈ 1,700,000,000,000 (1.7 trillion)
+           Multiplying by 60*60*10 = 36000 → OVERFLOWS long!
+           Result is a random garbage time far in past/future.
+           Fix: + 1000L * 60 * 60 * 10 (ADD 10 hours, don't multiply)
+           "L" forces long arithmetic to prevent overflow.
+
+  BUG 13: JWTService.java — extractUserName() was a stub
+           return "";  ← Always returns empty string!
+           JwtFilter extracts "" as username → null check fails → never authenticates!
+           Fix: Implemented real extraction using Claims::getSubject.
+
+  BUG 14: JWTService.java — validateToken() was a stub
+           return true;  ← Always returns true! Any token works.
+           Expired tokens work. Forged tokens work. No real security!
+           Fix: Implemented real validation: checks username + expiry.
+
+  BUG 15: JWTService.java — Wrong import (org.apache.catalina.User)
+           This is a Tomcat internal class. Completely wrong!
+           Not even used in the code.
+           Fix: Removed the import.
+
+  BUG 16: UserService.java — Wrong return type for authenticate()
+           AuthenticationManager authentication = authManager.authenticate(...)
+           authenticate() returns Authentication, NOT AuthenticationManager!
+           Fix: Authentication authentication = authManager.authenticate(...)
+
+  BUG 17: UserService.java — generateToken() called without argument
+           jwtService.generateToken()  ← method needs String userName!
+           Fix: jwtService.generateToken(user.getUsername())
+
+  BUG 18: UserPrincipal.java — Wrong role format
+           new SimpleGrantedAuthority("USER")  ← missing "ROLE_" prefix!
+           Spring Security's hasRole() automatically adds "ROLE_".
+           Without the prefix: role-based access controls don't work.
+           Fix: new SimpleGrantedAuthority("ROLE_USER")
+
+================================================================
+PART 6: ARCHITECTURE — How ALL Files Connect
+================================================================
+
+                 application.properties
+                        |
+                   (DB settings)
+                        |
+         SpringSecurityApplication.java
+                        |
+                 (starts everything)
+                        |
+    ┌───────────────────────────────────────────────┐
+    │              SECURITY LAYER                   │
+    │                                               │
+    │  SecurityConfig ←── MyUserDetailsService      │
+    │      |                    |                   │
+    │  (security rules)    (find user by name)      │
+    │      |                    |                   │
+    │  JwtFilter ←── JWTService │                   │
+    │      |         (JWT ops)  |                   │
+    │  (intercepts   .generate  |                   │
+    │   every req)  .validate   UserPrincipal        │
+    │      |        .extract    (adapter/bridge)     │
+    └───────────────────────────────────────────────┘
+           |
+           | (if authenticated)
+           v
+    ┌──────────────────────────────────┐
+    │         CONTROLLERS              │
+    │  HelloController   → GET /       │
+    │  StudentController → GET/POST    │
+    │  UserController    → register    │
+    │                    → login       │
+    └──────────────────────────────────┘
+           |
+           | (calls services)
+           v
+    ┌──────────────────────────────────┐
+    │          SERVICES                │
+    │  UserService                     │
+    │    .register() → hash + save     │
+    │    .verify()   → auth + JWT      │
+    └──────────────────────────────────┘
+           |
+           | (calls repo)
+           v
+    ┌──────────────────────────────────┐
+    │          REPOSITORY              │
+    │  UserRepo                        │
+    │    .findByUsername()             │
+    │    .save()                       │
+    └──────────────────────────────────┘
+           |
+           v
+    ┌──────────────────────────────────┐
+    │       MySQL DATABASE             │
+    │  users table:                    │
+    │  | id | username | password |    │
+    │  | 1  | sanjay   | $2a$12.. |   │
+    └──────────────────────────────────┘
+
+================================================================
+PART 7: KEY CONCEPTS QUICK REFERENCE
+================================================================
+
+JWT (JSON Web Token):
+  A self-contained digital pass.
+  Structure: header.payload.signature (Base64 encoded)
+  Server creates it → gives to client → client sends it every request.
+  Server reads it → verifies signature → trusts the contents.
+
+@Bean:
+  A method that creates an object managed by Spring.
+  Other parts can @Autowired these objects.
+
+@Autowired:
+  "Spring, inject the right object here. I don't create it myself."
+  This is Dependency Injection — the heart of Spring.
+
+@Component / @Service / @Repository / @Controller / @RestController:
+  All tell Spring: "Create ONE instance of this class and manage it."
+  @Service = business logic layer.
+  @Repository = database layer.
+  @RestController = web request handler.
+  @Component = generic Spring-managed class (like JwtFilter).
+
+Filter Chain:
+  A series of checks every request must pass through.
+  Filters run in order. Any filter can reject the request.
+  JwtFilter is added to this chain via .addFilterBefore().
+
+SecurityContextHolder:
+  Spring Security's in-memory holder for "who is currently logged in."
+  JwtFilter sets authentication here → all security checks see this user.
+  Cleared after each request (since we're STATELESS).
+
+BCrypt:
+  A password hashing algorithm. One-way: can hash but cannot unhash.
+  To verify: hash the input and compare with stored hash.
+  Strength 12 = 2^12 = 4096 rounds of hashing. Very secure, somewhat slow.
+
+STATELESS vs STATEFUL:
+  STATEFUL: Server remembers sessions. Uses cookies. Traditional websites.
+  STATELESS: Server remembers NOTHING. Client sends token every request.
+             REST APIs are always stateless. JWTs enable statelessness.
+
+extends vs implements:
+  extends → Class inherits from Class (gets all methods).
+  extends → Interface inherits from Interface.
+  implements → Class fulfills a Contract (Interface).
+  A class can only extend ONE class.
+  A class can implement MANY interfaces.
+
+Checked vs Unchecked Exceptions:
+  Checked = Must be declared with "throws" or caught with try/catch.
+            Example: IOException, NoSuchAlgorithmException.
+  Unchecked = No need to declare. Example: NullPointerException.
+  authManager.authenticate() throws checked exception → need throws Exception!
+
+================================================================
+PART 8: HOW TO TEST THIS API (Postman Guide)
+================================================================
+
+STEP 1: Start MySQL server and create database:
+  CREATE DATABASE my_database;
+
+STEP 2: Start the Spring Boot app.
+  Check console: "Started SpringSecurityApplication on port 8080"
+
+STEP 3: Register a user:
+  Method: POST
+  URL: http://localhost:8080/user/register
+  Body (JSON):
+    {"id": 1, "username": "sanjay", "password": "S@123"}
+  Response: User object with hashed password.
+
+STEP 4: Login to get JWT token:
+  Method: POST
+  URL: http://localhost:8080/user/login
+  Body (JSON):
+    {"username": "sanjay", "password": "S@123"}
+  Response: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5qYXki..."
+  COPY THIS TOKEN!
+
+STEP 5: Access protected endpoint:
+  Method: GET
+  URL: http://localhost:8080/students
+  Headers:
+    Key: Authorization
+    Value: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW5qYXki...
+           (paste your token after "Bearer ")
+  Response: List of students as JSON.
+
+STEP 6: Try without token:
+  Same request but remove the Authorization header.
+  Response: 401 Unauthorized ← correct! Spring Security blocks it.
+
+================================================================
+END OF DOCUMENT
+================================================================
+
+  You now understand EVERYTHING about how this Spring Security +
+  JWT project works. Every file, every method, every bug that
+  was fixed, and why each decision was made.
+
+  The key journey:
+  Register → Login → Get JWT Token → Use Token → Access Protected APIs
+
+  Good luck with your Spring Security learning! 🎉

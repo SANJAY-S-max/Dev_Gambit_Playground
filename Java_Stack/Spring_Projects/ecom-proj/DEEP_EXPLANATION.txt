@@ -1,0 +1,1049 @@
+================================================================
+  ECOM-PROJ - DEEP EXPLANATION FOR BEGINNERS
+  Written by: Your AI Teacher
+  Project: com.sanjay.ecom_proj
+================================================================
+
+Before anything else, read this one paragraph that explains
+EVERYTHING in simple words:
+
+  "You built an E-Commerce REST API. Users can add products
+   (with images!), view all products, search for products by
+   name/brand/category, update them, and delete them. Products
+   are stored in MySQL. Images are stored inside the database
+   as binary data (byte arrays). You use Spring Boot + JPA +
+   MySQL + Lombok to make it work with very little boilerplate
+   code."
+
+That's the whole project. Now let's go DEEP.
+
+================================================================
+PART 1: WHAT IS A REST API?
+================================================================
+
+REST API = A web service that lets other apps communicate
+           with your server using standard HTTP methods:
+
+  GET    → Read data (e.g., get all products)
+  POST   → Create new data (e.g., add a product)
+  PUT    → Update existing data (e.g., update a product)
+  DELETE → Delete data (e.g., delete a product)
+
+YOUR ENDPOINTS:
+  GET    /api/products              → Get all products
+  GET    /api/product/{id}          → Get one product by ID
+  GET    /api/product/{id}/image    → Get product image
+  GET    /api/products/search?keyword=... → Search products
+  POST   /api/product               → Add a new product
+  PUT    /api/product/{id}          → Update a product
+  DELETE /api/product/{id}          → Delete a product
+
+Each endpoint is like a "door" that other applications
+(React frontend, Postman, mobile app) can knock on.
+
+================================================================
+PART 2: THE REQUEST FLOW
+================================================================
+
+When Postman/Frontend sends a request:
+
+  YOU (Postman / React App)
+        |
+        | HTTP Request (GET /api/products)
+        v
+  ┌─────────────────────────────────────────────────────┐
+  │              YOUR SPRING BOOT APP                   │
+  │                                                     │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │      DISPATCHER SERVLET (Traffic Cop)        │   │
+  │  │  Reads URL → decides which @Controller       │   │
+  │  │  method handles it                           │   │
+  │  └──────────────────────┬───────────────────────┘   │
+  │                         |                           │
+  │                         v                           │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │      ProductController (Your Code!)          │   │
+  │  │  @GetMapping, @PostMapping, etc.             │   │
+  │  └──────────────────────┬───────────────────────┘   │
+  │                         |                           │
+  │                         v                           │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │      ProductService (Business Logic)         │   │
+  │  │  Calls repo methods, sets image data, etc.   │   │
+  │  └──────────────────────┬───────────────────────┘   │
+  │                         |                           │
+  │                         v                           │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │      ProductRepo (Database Helper)           │   │
+  │  │  JpaRepository methods → talks to MySQL      │   │
+  │  └──────────────────────┬───────────────────────┘   │
+  │                         |                           │
+  │                         v                           │
+  │  ┌──────────────────────────────────────────────┐   │
+  │  │             MySQL DATABASE                   │   │
+  │  │  "Product" table with all product rows       │   │
+  │  └──────────────────────────────────────────────┘   │
+  └─────────────────────────────────────────────────────┘
+
+ARCHITECTURE RULE (important for learning):
+  Controller → Service → Repository → Database
+  NEVER: Controller → Repository directly (bypass service)
+  WHY: Service is where business logic lives.
+       If you later want to add validation, caching, etc.,
+       you add it in the Service — not scattered in controllers.
+
+================================================================
+PART 3: FILE-BY-FILE DEEP EXPLANATION
+================================================================
+
+─────────────────────────────────────────────────────────────
+FILE 1: pom.xml (The Dependency Shopping List)
+─────────────────────────────────────────────────────────────
+
+What is pom.xml?
+  Maven's build file. Declares all libraries (dependencies)
+  your project needs. Maven downloads them automatically.
+
+  <parent>
+    <version>3.3.4</version>  ← FIXED (was 4.1.1 which doesn't exist!)
+  </parent>
+
+  WHY FIXED: Spring Boot 4.1.1 was a typo. It doesn't exist on
+  Maven Central. Maven couldn't download it → project won't build!
+  3.3.4 is the real current Spring Boot version.
+
+  <dependency>
+    <artifactId>spring-boot-starter-web</artifactId>
+  </dependency>
+  PURPOSE: Everything needed for a REST API:
+           - Spring MVC (handles @RestController, @GetMapping etc.)
+           - Jackson (converts Java objects ↔ JSON automatically)
+           - Embedded Tomcat server (runs on port 8080)
+
+  <dependency>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+  </dependency>
+  PURPOSE: JPA (Java Persistence API) + Hibernate.
+           Lets you work with database using Java objects.
+           Instead of: "INSERT INTO product VALUES (1, 'Laptop', ...)"
+           You write:  repo.save(product)  ← Much simpler!
+
+  <dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+  </dependency>
+  PURPOSE: The JDBC driver that allows Java to connect to MySQL.
+           scope=runtime = needed at runtime but not during compilation.
+           Without this: "Cannot connect to database" error on startup.
+
+  <dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+  </dependency>
+  PURPOSE: Lombok is a code GENERATOR. It reads your annotations
+           and AUTOMATICALLY generates boilerplate code:
+           @Data          → generates getters, setters, equals, hashCode, toString
+           @AllArgsConstructor → generates constructor with all fields
+           @NoArgsConstructor  → generates empty constructor
+           Without Lombok: You'd write 100+ lines of getters/setters!
+           With Lombok: Just 3 annotations → it writes them for you.
+           optional=true = not included in final JAR (only needed at compile time)
+
+  <plugin>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+      <excludes>
+        <exclude>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+        </exclude>
+      </excludes>
+    </configuration>
+  </plugin>
+  PURPOSE: FIXED — Excludes Lombok from the final JAR file.
+           Lombok is only needed during COMPILATION to generate code.
+           Once compiled, the generated code is there. Lombok itself
+           is not needed at runtime. Excluding it reduces JAR size.
+
+─────────────────────────────────────────────────────────────
+FILE 2: application.properties (The Settings File)
+─────────────────────────────────────────────────────────────
+
+spring.application.name=ecom-proj
+  PURPOSE: Gives your app a name. Used in logs and monitoring.
+
+spring.datasource.url=jdbc:mysql://localhost:3306/Product
+  PURPOSE: Where is the database?
+           jdbc    = Java Database Connectivity (standard Java DB protocol)
+           mysql   = database type
+           localhost = on YOUR computer
+           3306    = MySQL's default port
+           Product = the database/schema name
+  ⚠️ You MUST create this database in MySQL first:
+     CREATE DATABASE Product;
+
+spring.datasource.username=root
+spring.datasource.password=Thilagasanjay
+  PURPOSE: MySQL login credentials.
+  ⚠️ NEVER put real passwords here in production!
+     Use environment variables: spring.datasource.password=${DB_PASSWORD}
+
+spring.jpa.show-sql=true
+  PURPOSE: Print all SQL queries to the console.
+           When repo.save(product) runs, you'll see:
+           "insert into product (name, price, ...) values (?, ?, ...)"
+           Very helpful for debugging and understanding JPA!
+
+spring.jpa.hibernate.ddl-auto=update
+  PURPOSE: What happens to tables when app starts?
+           "update" = Auto-create table if not exists.
+                      Add new columns if you add fields to Product.java.
+                      Never drops existing data.
+  ⚠️ Use "validate" in production to prevent accidental schema changes.
+
+─────────────────────────────────────────────────────────────
+FILE 3: EcomProjApplication.java (The Entry Point)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @SpringBootApplication
+  public class EcomProjApplication {
+      public static void main(String[] args) {
+          SpringApplication.run(EcomProjApplication.class, args);
+      }
+  }
+
+LINE BY LINE:
+
+  @SpringBootApplication
+  PURPOSE: This single annotation does THREE things:
+           1. @Configuration: "This is a Spring config class."
+           2. @EnableAutoConfiguration: "See what's in pom.xml and
+              auto-configure everything."
+              Sees JPA + MySQL driver → auto-configures database.
+              Sees spring-boot-starter-web → auto-configures web server.
+           3. @ComponentScan: "Find all @Controller, @Service,
+              @Repository, @Component in this package and sub-packages."
+  WHY: Without this, Spring doesn't know about any of your classes!
+
+  public static void main(String[] args) {
+  PURPOSE: Java starts here. Every Java program has exactly one main().
+
+  SpringApplication.run(EcomProjApplication.class, args);
+  PURPOSE: "Start the entire Spring ecosystem!"
+           This does:
+           - Reads application.properties
+           - Connects to MySQL
+           - Creates ProductController, ProductService, ProductRepo objects
+           - Starts Tomcat server on port 8080
+           - Your API is ready to receive requests!
+
+─────────────────────────────────────────────────────────────
+FILE 4: Product.java (The Database Table Blueprint)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Entity
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public class Product {
+
+      @Id
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+      private int id;
+
+      private String name;
+      private String description;
+      private BigDecimal price;
+      private String category;
+      private String brand;
+
+      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+      private Date releaseDate;  ← FIXED: was "releaseData" (typo!)
+
+      private boolean available;
+      private int quantity;
+
+      private String imageName;
+      private String imageType;
+
+      @Lob
+      private byte[] imageData;  ← FIXED: was "imageDate" (typo!)
+  }
+
+REAL WORLD EXAMPLE:
+  Product.java is like a PRODUCT FORM TEMPLATE.
+  It defines what information each product must have.
+  @Entity tells Spring: "Create a database table from this form."
+
+LINE BY LINE:
+
+  @Entity
+  PURPOSE: ★★ VERY IMPORTANT ★★
+           "This Java class = one database table."
+           Spring/JPA creates a table called "product" in MySQL.
+           Class name "Product" → table name "product" (lowercase).
+           WITHOUT @Entity: Just a plain Java class. No table.
+           WITH @Entity: Table auto-created with all fields as columns.
+
+  @Data (Lombok)
+  PURPOSE: GENERATES ALL of the following automatically:
+           - public String getName() { return this.name; }
+           - public void setName(String name) { this.name = name; }
+           - (same for all other fields)
+           - equals() method for comparing two Product objects
+           - hashCode() for use in collections like HashMap
+           - toString() for printing a product as text
+           WITHOUT @Data: You'd have to write ~80 lines of code!
+
+  @AllArgsConstructor (Lombok)
+  PURPOSE: Generates a constructor with ALL fields as parameters:
+           public Product(int id, String name, String desc, ...) { ... }
+           Lets you create a Product with all values at once.
+
+  @NoArgsConstructor (Lombok)
+  PURPOSE: Generates an empty constructor:
+           public Product() { }
+           JPA REQUIRES this to create empty objects before filling them!
+           Without this: JPA throws an error when reading from database.
+
+  @Id
+  PURPOSE: "This field is the PRIMARY KEY of the table."
+           No two products can have the same id.
+           Like a unique product barcode.
+
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  PURPOSE: FIXED — Added! Tells MySQL: "Auto-increment the id field."
+           When you insert a new product WITHOUT specifying id,
+           MySQL automatically assigns the next available number.
+           1 → 2 → 3 → ... Never repeat.
+           WITHOUT @GeneratedValue: You must manually provide an id
+           every time you add a product. Very error-prone!
+           WITH @GeneratedValue: MySQL handles it. Just send product data,
+           and the id is auto-assigned.
+
+  private BigDecimal price;
+  PURPOSE: BigDecimal is used for MONEY values instead of float/double.
+           WHY? Float/double have rounding errors!
+           float price = 0.1 + 0.2 → 0.30000000000000004 (WRONG!)
+           BigDecimal handles exact decimal arithmetic. No rounding errors.
+           Always use BigDecimal for currency!
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  private Date releaseDate;
+  PURPOSE: @JsonFormat = "When converting this date to JSON, use this format."
+           Without @JsonFormat: Date is shown as a Unix timestamp (number).
+           With @JsonFormat: Date is shown as "2024-01-15" (readable!).
+  ★ FIXED TYPO ★: Was "releaseData" (wrong!) → now "releaseDate" (correct!).
+  A typo in a field name means:
+  - Getter becomes getReleaseData() instead of getReleaseDate()
+  - Setter becomes setReleaseData() instead of setReleaseDate()
+  - JSON key becomes "releaseData" instead of "releaseDate"
+  - Confusing API for users, hard to maintain!
+
+  @Lob
+  private byte[] imageData;
+  PURPOSE: @Lob = "Large Object". Tells JPA/MySQL this field stores
+           large binary data.
+           byte[] = an array of bytes = raw binary data = an image file!
+           MySQL stores this in a LONGBLOB column (can hold up to 4GB).
+  ★ FIXED TYPO ★: Was "imageDate" (wrong!) → now "imageData" (correct!).
+  The typo caused methods like setImageDate() (what?!) instead of
+  setImageData() (makes sense!). Very confusing!
+
+  private String imageName;
+  private String imageType;
+  PURPOSE: Store metadata ABOUT the image:
+           imageName = "laptop.jpg"
+           imageType = "image/jpeg"
+           imageData = the actual binary bytes of the image
+           The type is needed to tell the browser: "This is a JPEG image."
+           The name helps the user know what file they uploaded.
+
+─────────────────────────────────────────────────────────────
+FILE 5: ProductRepo.java (The Database Helper Interface)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Repository
+  public interface ProductRepo extends JpaRepository<Product, Integer> {
+
+      @Query("SELECT p FROM Product p WHERE " +
+             "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+             "LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+             "LOWER(p.brand) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+             "LOWER(p.category) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+      List<Product> searchProducts(@Param("keyword") String keyword);
+  }
+
+LINE BY LINE:
+
+  @Repository
+  PURPOSE: Tells Spring: "This is a database access class."
+           Spring creates an implementation automatically.
+           Also enables database error translation.
+
+  public interface ProductRepo extends JpaRepository<Product, Integer>
+  PURPOSE: You get ALL these methods FREE from JpaRepository:
+           - save(product)          → INSERT or UPDATE
+           - findById(1)            → SELECT WHERE id = 1
+           - findAll()              → SELECT * FROM product
+           - deleteById(1)          → DELETE WHERE id = 1
+           - count()                → SELECT COUNT(*)
+           All working with ZERO code from you!
+           <Product, Integer> = working with Product table, ID is Integer.
+
+  @Query("SELECT p FROM Product p WHERE ...")
+  PURPOSE: ★★ CUSTOM JPQL QUERY ★★
+           JPQL = JPA Query Language. Similar to SQL but uses JAVA
+           CLASS NAMES instead of TABLE NAMES.
+           
+           "SELECT p FROM Product p" = Select all Products (Java class)
+           "WHERE" = filter condition
+           
+           LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+           = Case-insensitive search for keyword in name
+           LOWER() = convert to lowercase before comparing
+           LIKE = SQL pattern matching
+           % = wildcard (any characters)
+           CONCAT('%', :keyword, '%') = "%laptop%" = anything containing "laptop"
+           
+           So "LOWER(name) LIKE LOWER('%laptop%')" means:
+           "Name contains 'laptop' (case-insensitive)"
+           
+           OR = search in name OR description OR brand OR category
+           If keyword is in ANY of these → product matches!
+           
+           :keyword = a named parameter (replaced with actual value)
+
+  @Param("keyword") String keyword
+  PURPOSE: Tells Spring: "The :keyword in @Query maps to this parameter."
+           When you call searchProducts("laptop"):
+           :keyword gets replaced with "laptop"
+           → LOWER(p.name) LIKE LOWER('%laptop%')
+
+─────────────────────────────────────────────────────────────
+FILE 6: ProductService.java (The Business Logic Layer)
+─────────────────────────────────────────────────────────────
+
+FULL CODE:
+  @Service
+  public class ProductService {
+
+      @Autowired
+      private ProductRepo repo;
+
+      public List<Product> getAllProducts() {
+          return repo.findAll();
+      }
+
+      public Product getProductById(int id) {
+          return repo.findById(id).orElse(null);  ← FIXED!
+      }
+
+      public Product addProduct(Product product, MultipartFile imageFile)
+              throws IOException {
+          product.setImageName(imageFile.getOriginalFilename());
+          product.setImageType(imageFile.getContentType());
+          product.setImageData(imageFile.getBytes());  ← FIXED!
+          return repo.save(product);
+      }
+
+      public Product updateProduct(int id, Product product, MultipartFile imageFile)
+              throws IOException {
+          product.setImageData(imageFile.getBytes());  ← FIXED!
+          product.setImageName(imageFile.getOriginalFilename());
+          product.setImageType(imageFile.getContentType());
+          return repo.save(product);
+      }
+
+      public void deleteProduct(int id) {
+          repo.deleteById(id);
+      }
+
+      public List<Product> searchProducts(String keyword) {
+          return repo.searchProducts(keyword);
+      }
+  }
+
+LINE BY LINE:
+
+  @Service
+  PURPOSE: Tells Spring: "This is a SERVICE class — business logic lives here."
+           Spring creates one instance and manages it.
+           It sits between the Controller (web) and Repository (database).
+           Controller calls service. Service calls repository.
+
+  @Autowired private ProductRepo repo;
+  PURPOSE: Dependency Injection. Spring creates a ProductRepo and injects it.
+           You don't write: ProductRepo repo = new ProductRepo();
+           Spring handles creation. You just use it.
+
+  public List<Product> getAllProducts()
+  PURPOSE: Returns all products from the database.
+           repo.findAll() → SELECT * FROM product → List of Product objects.
+
+  public Product getProductById(int id)
+  ★ FIXED ★: Was: repo.findById(id).orElse(new Product())
+             What was wrong? When id doesn't exist, it returned a BLANK
+             Product object (id=0, name=null, etc.) instead of indicating
+             "not found". The controller checked if product != null — but
+             it was never null! Always got a blank product back.
+             This caused the controller to return HTTP 200 OK with
+             empty product data for non-existent IDs. Misleading!
+  FIXED TO: repo.findById(id).orElse(null)
+            Now: if id not found → returns null.
+            Controller checks: if (product != null) → HTTP 200
+                               else → HTTP 404 Not Found.
+            Correct behavior!
+
+  orElse(null):
+  PURPOSE: repo.findById(id) returns Optional<Product>.
+           Optional = "might have a value, might not."
+           .orElse(null) = "If the Optional is empty (not found),
+                            return null instead."
+
+  public Product addProduct(Product product, MultipartFile imageFile)
+  PURPOSE: Save a new product with its image to the database.
+           MultipartFile = "A file uploaded via HTTP multipart request."
+           This is how you send images in HTTP requests.
+
+  imageFile.getOriginalFilename()
+  PURPOSE: Get the filename: e.g., "laptop.jpg"
+
+  imageFile.getContentType()
+  PURPOSE: Get the MIME type: e.g., "image/jpeg", "image/png"
+           This is needed to tell the browser HOW to display the image.
+
+  imageFile.getBytes()  ← FIXED (was imageFile.getBytes() → setImageDate)
+  PURPOSE: Read the entire file as a byte array (raw binary data).
+           This byte array is stored in the @Lob byte[] imageData column.
+           The image lives inside the database row!
+  ★ FIXED ★: Was product.setImageDate() (typo!) → now product.setImageData()
+             The typo caused: "cannot find method setImageDate" compile error!
+
+  repo.save(product)
+  PURPOSE: Save the product to MySQL.
+           JPA generates: INSERT INTO product (name, price, ..., image_data) VALUES (...)
+           Returns the saved product (now with auto-generated id from DB).
+
+  throws IOException
+  PURPOSE: imageFile.getBytes() can throw IOException (if file reading fails).
+           Java requires you to DECLARE this: "this method might throw IOException."
+           Callers (the controller) must handle this or also declare throws.
+
+  public Product updateProduct(int id, Product product, MultipartFile imageFile)
+  PURPOSE: Update an existing product.
+           The product object comes from the request with the updated data.
+           The id in the URL path matches the product's id in the DB.
+           repo.save(product) does an UPDATE (not INSERT) if id already exists.
+
+─────────────────────────────────────────────────────────────
+FILE 7: ProductController.java (The REST API Endpoints)
+─────────────────────────────────────────────────────────────
+
+FULL CODE (after fixes):
+  @RestController
+  @CrossOrigin
+  @RequestMapping("/api")
+  public class ProductController {
+
+      @Autowired
+      ProductService service;
+
+      @GetMapping("/")
+      public String greet() { return "hello world"; }
+
+      @GetMapping("/products")
+      public ResponseEntity<List<Product>> getAllProduct() {
+          return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
+      }
+
+      @GetMapping("/product/{id}")
+      public ResponseEntity<Product> getProduct(@PathVariable int id) {
+          Product product = service.getProductById(id);
+          if (product != null) {
+              return new ResponseEntity<>(product, HttpStatus.OK);
+          } else {
+              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+      }
+
+      @PostMapping("/product")
+      public ResponseEntity<?> addProduct(@RequestPart Product product,
+                                          @RequestPart MultipartFile imageFile) {
+          try {
+              Product product1 = service.addProduct(product, imageFile);
+              return new ResponseEntity<>(product1, HttpStatus.CREATED);
+          } catch (Exception e) {
+              return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+          }
+      }
+
+      @GetMapping("/product/{productId}/image")
+      public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId) {
+          Product product = service.getProductById(productId);
+          if (product == null) {
+              return new ResponseEntity<>(HttpStatus.NOT_FOUND);  ← FIXED: null check added
+          }
+          byte[] imageFile = product.getImageData();  ← FIXED: was imageDate
+          return ResponseEntity.ok()
+              .contentType(MediaType.valueOf(product.getImageType()))
+              .body(imageFile);
+      }
+
+      @PutMapping("/product/{id}")
+      public ResponseEntity<String> updateProduct(@PathVariable int id,
+                                                   @RequestPart Product product,
+                                                   @RequestPart MultipartFile imageFile)
+              throws IOException {
+          Product product1 = service.updateProduct(id, product, imageFile);
+          if (product1 != null) {
+              return new ResponseEntity<>("Updated", HttpStatus.OK);
+          } else {
+              return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
+          }
+      }
+
+      @DeleteMapping("/product/{id}")
+      public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+          Product product = service.getProductById(id);
+          if (product != null) {
+              service.deleteProduct(id);
+              return new ResponseEntity<>("Deleted", HttpStatus.OK);
+          } else {
+              return new ResponseEntity<>("Product not Found", HttpStatus.NOT_FOUND);  ← FIXED!
+          }
+      }
+
+      @GetMapping("/products/search")  ← FIXED: was "/products" (duplicate!)
+      public ResponseEntity<List<Product>> searchProduct(@RequestParam String keyword) {
+          List<Product> products = service.searchProducts(keyword);
+          return new ResponseEntity<>(products, HttpStatus.OK);
+      }
+  }
+
+ANNOTATION EXPLANATIONS:
+
+  @RestController
+  PURPOSE: "This class handles HTTP requests and returns JSON/text."
+           Combination of @Controller + @ResponseBody.
+           @Controller = "handles web requests"
+           @ResponseBody = "return data directly, not a view/HTML page"
+
+  @CrossOrigin
+  PURPOSE: Allow requests from any domain/port.
+           Without this: browser's Same-Origin Policy blocks requests
+           from your React frontend (port 3000) to your API (port 8080).
+           @CrossOrigin("*") = allow from ANYWHERE.
+           ⚠️ Restrict to specific domains in production!
+
+  @RequestMapping("/api")
+  PURPOSE: Base URL prefix. ALL methods in this class start with "/api".
+           @GetMapping("/products") → actual URL: GET /api/products
+           @PostMapping("/product") → actual URL: POST /api/product
+
+  @Autowired ProductService service;
+  PURPOSE: Dependency Injection. Spring injects the ProductService.
+           Controller delegates ALL logic to the service.
+           Controller only handles: parsing requests, calling service,
+           wrapping response. NEVER puts business logic here.
+
+ENDPOINT EXPLANATIONS:
+
+  @GetMapping("/")
+  return "hello world";
+  PURPOSE: A simple health-check endpoint.
+           Visit http://localhost:8080/api/ → see "hello world"
+           Useful for checking if the server is running.
+
+  @GetMapping("/products") — getAllProduct()
+  PURPOSE: Return ALL products in the database.
+           ResponseEntity<List<Product>> = "Return a list of products with HTTP status."
+           HttpStatus.OK = 200 → "Everything worked fine."
+
+  ResponseEntity:
+  PURPOSE: A WRAPPER that lets you control the HTTP response:
+           - Set the response BODY (data)
+           - Set the HTTP STATUS CODE (200, 404, 201, 500, etc.)
+           Without ResponseEntity: always returns 200.
+           With ResponseEntity: you decide what status to return.
+
+  @GetMapping("/product/{id}") — getProduct()
+  @PathVariable int id
+  PURPOSE: {id} is a URL VARIABLE. 
+           URL: GET /api/product/5 → id = 5
+           @PathVariable extracts "5" from the URL and gives it to the method.
+           Then we look up the product with id=5 in the database.
+
+  if (product != null) → HttpStatus.OK (200)
+  else → HttpStatus.NOT_FOUND (404)
+  PURPOSE: Return 200 if found, 404 if not.
+           After the fix to service.getProductById() (returning null instead
+           of new Product()), this null check now works correctly.
+
+  @PostMapping("/product") — addProduct()
+  @RequestPart Product product
+  @RequestPart MultipartFile imageFile
+  PURPOSE: @RequestPart = read a PART of a multipart/form-data request.
+           Multipart = request with BOTH JSON data AND file upload together.
+           You send the product as one part (JSON) and the image as another part.
+           Spring automatically converts the JSON part to a Product object.
+           Spring gives the file part as a MultipartFile object.
+           
+  try { ... } catch (Exception e) { return ...INTERNAL_SERVER_ERROR }
+  PURPOSE: If ANYTHING fails (disk error, DB error, etc.):
+           Return HTTP 500 Internal Server Error with the error message.
+           Without try-catch: Exception would crash the request with no nice response.
+
+  HttpStatus.CREATED (201):
+  PURPOSE: "201 Created" = "Resource was successfully created."
+           More specific than 200. Tells the caller: "New product was made."
+
+  @GetMapping("/product/{productId}/image") — getImageByProductId()
+  ★ FIXED: Added null check before accessing image data ★
+  PURPOSE: Return the raw image bytes so the browser can display the image.
+           if (product == null) → return 404. Without this check:
+           product.getImageData() would throw NullPointerException → 500 error!
+           
+  ResponseEntity.ok()
+      .contentType(MediaType.valueOf(product.getImageType()))
+      .body(imageFile)
+  PURPOSE: "Return the image bytes with the correct Content-Type header."
+           .contentType("image/jpeg") tells the browser: "This is a JPEG image."
+           Browser then renders it as an image instead of binary garbage.
+
+  @PutMapping("/product/{id}") — updateProduct()
+  PURPOSE: Update an existing product.
+           @PathVariable int id = which product to update
+           @RequestPart Product product = new product data
+           @RequestPart MultipartFile imageFile = new image
+           throws IOException = declared because getBytes() can throw it.
+
+  @DeleteMapping("/product/{id}") — deleteProduct()
+  ★ FIXED: Was returning HttpStatus.BAD_REQUEST for not found ★
+  PURPOSE: Delete product by ID.
+           BEFORE: If not found → return BAD_REQUEST (400) — semantically wrong!
+                   400 Bad Request means the CLIENT did something wrong.
+                   But the client did nothing wrong — the product just doesn't exist!
+           AFTER:  If not found → return NOT_FOUND (404) — correct!
+                   404 = "The thing you asked for doesn't exist."
+
+  @GetMapping("/products/search") — searchProduct()
+  ★ FIXED: Duplicate @GetMapping("/products") bug ★
+  BEFORE: The original code had:
+    @GetMapping("/products") getAllProduct()    ← first mapping
+    @GetMapping("/products") searchProduct()   ← DUPLICATE mapping!
+    Spring throws: "AmbiguousHandlerMappingException" → APP CANNOT START!
+  AFTER: Search moved to /api/products/search
+    @GetMapping("/products")        getAllProduct()   ← get all
+    @GetMapping("/products/search") searchProduct()  ← search
+
+  ★ ALSO FIXED: @RequestParam annotation added ★
+  BEFORE: public ResponseEntity<List<Product>> searchProduct(String keyword)
+          No annotation on 'keyword' → Spring has no idea where to get it!
+          HTTP requests don't magically find "keyword" from thin air.
+  AFTER:  public ... searchProduct(@RequestParam String keyword)
+          @RequestParam = "Get 'keyword' from the URL query string."
+          URL: GET /api/products/search?keyword=laptop
+          @RequestParam extracts "laptop" from "?keyword=laptop"
+
+================================================================
+PART 4: HOW MULTIPART FILE UPLOAD WORKS
+================================================================
+
+When you add a product with an image, the request is a
+"multipart/form-data" request. It's like sending multiple parts:
+
+  HTTP Request:
+    POST /api/product
+    Content-Type: multipart/form-data
+
+    --boundary
+    Content-Disposition: form-data; name="product"
+    Content-Type: application/json
+
+    {"name": "Gaming Laptop", "price": 75000.00, ...}
+
+    --boundary
+    Content-Disposition: form-data; name="imageFile"; filename="laptop.jpg"
+    Content-Type: image/jpeg
+
+    <binary image data>
+    --boundary--
+
+In Postman:
+  - Select "form-data" in Body tab
+  - Add key "product" (type: Text), value: {"name":"Laptop",...}
+  - Add key "imageFile" (type: File), value: select your image file
+
+Spring reads:
+  @RequestPart Product product   → Reads the "product" part as JSON → Java object
+  @RequestPart MultipartFile imageFile → Reads the "imageFile" part as file
+
+The service then extracts:
+  imageFile.getOriginalFilename() → "laptop.jpg"
+  imageFile.getContentType()      → "image/jpeg"
+  imageFile.getBytes()            → [binary data as byte[]]
+
+These get stored in the Product's fields (imageName, imageType, imageData).
+
+================================================================
+PART 5: COMPLETE FLOW — TWO SCENARIOS
+================================================================
+
+─────────────────────────────────────────────────────────────
+SCENARIO A: ADD A NEW PRODUCT
+─────────────────────────────────────────────────────────────
+
+Step 1: Postman sends:
+  POST http://localhost:8080/api/product
+  Body: form-data
+        product: {"name":"Laptop","price":75000,"brand":"Dell","category":"Electronics","quantity":10,"available":true,"releaseDate":"2024-01-15"}
+        imageFile: [laptop.jpg file]
+
+Step 2: Dispatcher Servlet reads URL "/api/product" → routes to ProductController.addProduct()
+
+Step 3: addProduct() runs.
+  @RequestPart converts JSON → Product{name="Laptop", price=75000, ...}
+  @RequestPart gives MultipartFile{name="imageFile", content="image/jpeg", bytes=[...]}
+
+Step 4: service.addProduct(product, imageFile) runs.
+  product.setImageName("laptop.jpg")
+  product.setImageType("image/jpeg")
+  product.setImageData([binary bytes of laptop.jpg])
+
+Step 5: repo.save(product) runs.
+  JPA generates SQL:
+  INSERT INTO product (name, description, price, category, brand,
+                       release_date, available, quantity,
+                       image_name, image_type, image_data)
+  VALUES ('Laptop', null, 75000.00, 'Electronics', 'Dell',
+          '2024-01-15', true, 10, 'laptop.jpg', 'image/jpeg', <binary>)
+
+Step 6: MySQL auto-assigns id (e.g., 1) and saves the row.
+
+Step 7: repo.save() returns the saved Product with id=1.
+
+Step 8: addProduct() returns ResponseEntity{body=Product{id=1,...}, status=201 CREATED}
+
+Step 9: Postman shows:
+  HTTP 201 Created
+  {"id": 1, "name": "Laptop", "price": 75000.00, ...}
+
+─────────────────────────────────────────────────────────────
+SCENARIO B: SEARCH FOR A PRODUCT
+─────────────────────────────────────────────────────────────
+
+Step 1: Postman sends:
+  GET http://localhost:8080/api/products/search?keyword=laptop
+
+Step 2: Controller.searchProduct() is called.
+  @RequestParam extracts "laptop" from "?keyword=laptop"
+
+Step 3: service.searchProducts("laptop") is called.
+
+Step 4: repo.searchProducts("laptop") runs the @Query:
+  SELECT p FROM Product p WHERE
+    LOWER(p.name) LIKE LOWER(CONCAT('%', 'laptop', '%')) OR
+    LOWER(p.description) LIKE LOWER(CONCAT('%', 'laptop', '%')) OR
+    ...
+
+  This becomes SQL:
+    SELECT * FROM product WHERE
+    LOWER(name) LIKE '%laptop%' OR
+    LOWER(description) LIKE '%laptop%' OR
+    LOWER(brand) LIKE '%laptop%' OR
+    LOWER(category) LIKE '%laptop%'
+
+Step 5: MySQL finds all matching products and returns them.
+
+Step 6: Postman shows a JSON array of matching products.
+
+─────────────────────────────────────────────────────────────
+SCENARIO C: GET PRODUCT IMAGE
+─────────────────────────────────────────────────────────────
+
+Step 1: Browser sends:
+  GET http://localhost:8080/api/product/1/image
+
+Step 2: Controller.getImageByProductId(1) is called.
+  service.getProductById(1) → repo.findById(1).orElse(null)
+  → Finds Product{id=1, imageName="laptop.jpg", imageType="image/jpeg", imageData=[...bytes...]}
+
+Step 3: (After the fix) null check: product != null → continue.
+  byte[] imageFile = product.getImageData() → the binary bytes
+
+Step 4: ResponseEntity.ok()
+        .contentType(MediaType.valueOf("image/jpeg"))
+        .body([binary bytes])
+  Returns the binary bytes with Content-Type: image/jpeg header.
+
+Step 5: Browser receives binary data + knows it's JPEG → displays the image!
+  This is how image retrieval from database works.
+
+================================================================
+PART 6: ALL BUGS FIXED (Summary)
+================================================================
+
+  BUG 1: pom.xml — Spring Boot version 4.1.1 doesn't exist
+          FIX: Changed to 3.3.4
+
+  BUG 2: pom.xml — No Lombok exclusion in plugin config
+          FIX: Added <excludes> config in spring-boot-maven-plugin
+          WHY: Lombok only needed at compile time, not in final JAR
+
+  BUG 3: Product.java — Typo: "releaseData" should be "releaseDate"
+          FIX: Renamed field to releaseDate
+          EFFECT: JSON key was wrong, getter/setter names were confusing
+
+  BUG 4: Product.java — Typo: "imageDate" should be "imageData"
+          FIX: Renamed field to imageData
+          EFFECT: setImageDate() → compile error! ProductService couldn't call it.
+
+  BUG 5: Product.java — Missing @GeneratedValue on @Id
+          FIX: Added @GeneratedValue(strategy = GenerationType.IDENTITY)
+          WHY: Without it, caller must manually provide id for every product.
+               With it, MySQL auto-increments. Better practice.
+
+  BUG 6: ProductService.java — getProductById returned new Product() on miss
+          FIX: Changed .orElse(new Product()) to .orElse(null)
+          WHY: new Product() has id=0, name=null — controller's null check
+               never triggered — always returned 200 even for non-existent IDs.
+
+  BUG 7: ProductService.java — setImageDate() called (wrong method name)
+          FIX: Changed to setImageData() (matching fixed field name)
+          WHY: Typo from Bug 4. Compile error.
+
+  BUG 8: ProductController.java — Duplicate @GetMapping("/products")
+          FIX: Changed search endpoint to @GetMapping("/products/search")
+          WHY: Two methods mapped to same URL → AmbiguousHandlerMappingException
+               App can't even START!
+
+  BUG 9: ProductController.java — searchProduct() keyword param not annotated
+          FIX: Added @RequestParam to keyword parameter
+          WHY: Without annotation, Spring doesn't know how to bind the value.
+               Keyword would always be null.
+
+  BUG 10: ProductController.java — No null check before getImageData()
+           FIX: Added if (product == null) return 404
+           WHY: If product not found and getImageData() called → NullPointerException!
+
+  BUG 11: ProductController.java — deleteProduct returns 400 for not found
+           FIX: Changed HttpStatus.BAD_REQUEST to HttpStatus.NOT_FOUND
+           WHY: 400 Bad Request = client did something wrong.
+                404 Not Found = the resource doesn't exist.
+                Semantically correct HTTP status codes matter!
+
+  BUG 12: ProductController.java — getImageByProductId used product.getImageDate()
+           FIX: Changed to product.getImageData()
+           WHY: Typo carried over from the field name bug.
+
+================================================================
+PART 7: KEY CONCEPTS QUICK REFERENCE
+================================================================
+
+@Entity:
+  Maps a Java class to a MySQL table.
+  Class name → table name (lowercase).
+  Fields → columns.
+
+@Id + @GeneratedValue:
+  @Id = primary key column.
+  @GeneratedValue = let database auto-assign the next number.
+
+Lombok Annotations:
+  @Data = generates all getters, setters, equals, hashCode, toString.
+  @AllArgsConstructor = generates constructor with all fields.
+  @NoArgsConstructor = generates empty constructor (required by JPA).
+
+ResponseEntity<T>:
+  Wraps your response body + HTTP status code.
+  new ResponseEntity<>(body, HttpStatus.OK) = 200 with body.
+  new ResponseEntity<>(HttpStatus.NOT_FOUND) = 404 no body.
+
+@PathVariable:
+  Extracts value from URL path: /product/{id} → id
+  GET /product/5 → id = 5
+
+@RequestParam:
+  Extracts value from query string: ?keyword=laptop → keyword
+  GET /products/search?keyword=laptop → keyword = "laptop"
+
+@RequestPart:
+  Extracts part from multipart/form-data request.
+  Used for file uploads combined with JSON data.
+
+MultipartFile:
+  Represents an uploaded file.
+  .getBytes() = raw binary content
+  .getContentType() = "image/jpeg" etc.
+  .getOriginalFilename() = "photo.jpg" etc.
+
+@Lob:
+  "Large Object" — stores binary data.
+  byte[] imageData = stores image as raw bytes in MySQL LONGBLOB column.
+
+BigDecimal:
+  Exact decimal numbers. Use for money/prices.
+  float/double have rounding errors. BigDecimal does not.
+
+@JsonFormat:
+  Controls how a field appears in JSON.
+  Date → "2024-01-15" instead of Unix timestamp number.
+
+Optional.orElse(null):
+  Returns the value if present, otherwise returns null.
+  Better than crashing with NoSuchElementException.
+
+================================================================
+PART 8: HOW TO TEST WITH POSTMAN
+================================================================
+
+STEP 1: Start MySQL and create database:
+  CREATE DATABASE Product;
+
+STEP 2: Start the Spring Boot app.
+  Console: "Started EcomProjApplication on port 8080"
+
+STEP 3: Add a product:
+  Method: POST
+  URL: http://localhost:8080/api/product
+  Body: form-data
+    product (Text): {"name":"Gaming Laptop","price":75000.00,"brand":"Dell","category":"Electronics","quantity":5,"available":true,"description":"High performance laptop","releaseDate":"2024-01-15"}
+    imageFile (File): [choose a .jpg file]
+
+STEP 4: Get all products:
+  Method: GET
+  URL: http://localhost:8080/api/products
+
+STEP 5: Get specific product:
+  Method: GET
+  URL: http://localhost:8080/api/product/1
+
+STEP 6: View product image:
+  Method: GET
+  URL: http://localhost:8080/api/product/1/image
+  (Paste URL in browser to see the image!)
+
+STEP 7: Search products:
+  Method: GET
+  URL: http://localhost:8080/api/products/search?keyword=laptop
+
+STEP 8: Delete a product:
+  Method: DELETE
+  URL: http://localhost:8080/api/product/1
+
+================================================================
+END OF DOCUMENT
+================================================================
+
+  You now understand EVERYTHING about how this ecom-proj works.
+  From request routing through the controller, business logic
+  in the service, JPA queries in the repository, to MySQL storage.
+  You also understand how images are stored as binary data in MySQL!
+
+  Good luck with your e-commerce API learning! 🛒

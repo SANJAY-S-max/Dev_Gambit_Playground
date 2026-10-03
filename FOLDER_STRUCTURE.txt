@@ -68,6 +68,7 @@
   │   │   → REST APIs, MVC, Spring Security, Spring Data JPA
   │   │   → Typically Maven/Gradle with application.properties
   │   │
+  │   ├── ecom-proj/          → E-commerce REST API with Spring Boot
   │   └── (Spring Boot exercises go here)
   │
   ├── Hibernate_JPA/

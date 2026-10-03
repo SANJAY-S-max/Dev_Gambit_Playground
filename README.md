@@ -90,6 +90,7 @@ Dev_Gambit_Playground/               ← The Chessboard
 | LoginModule | JSP/Servlet | Login & session management |
 | Students | JSP/Servlet | Student management CRUD |
 | WorkingJSP | JSP/Servlet | Complete JSP web exercise |
+| ecom-proj | Spring Boot | E-commerce REST API with Spring Boot & MySQL |
 
 ### ♝ MERN Stack
 | Exercise | Category | Description |
