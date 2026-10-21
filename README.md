@@ -32,7 +32,7 @@ Dev_Gambit_Playground/               ← The Chessboard
 │
 ├── ♞ Java_Stack/                    ← Java Pieces (Back-end)
 │   ├── JSP_Servlet_Projects/        ← Web tier: JSP & Servlet exercises
-│   ├── Spring_Projects/             ← Spring Framework exercises
+│   ├── Spring_Projects/             ← Spring Boot REST APIs & Microservices
 │   ├── Hibernate_JPA/               ← ORM & Database mapping
 │   └── Other_Java/                  ← Core Java, DSA, misc Java
 │
@@ -57,6 +57,7 @@ Dev_Gambit_Playground/               ← The Chessboard
 |--------|-------|--------|
 | ♞ Knight | Java — JSP/Servlet | 🟢 Active |
 | ♞ Knight | Java — Spring Boot | 🟢 Active |
+| ♞ Knight | Java — Spring Cloud / Microservices | 🟢 Active |
 | ♞ Knight | Java — Hibernate/JPA | 🟢 Active |
 | ♝ Bishop | React / Frontend | 🟢 Active |
 | ♝ Bishop | Node.js & Express | 🟢 Active |
@@ -93,6 +94,8 @@ Dev_Gambit_Playground/               ← The Chessboard
 | ecom-proj | Spring Boot | E-commerce REST API with Spring Boot & MySQL |
 | springSecurity | Spring Boot | Spring Security implementation and examples |
 | SpringOauth2 | Spring Boot | OAuth2 implementation with Spring Boot |
+| quizapp | Spring Boot | Monolithic Quiz REST API with Spring Boot & MySQL |
+| Microservices/quizapp | Spring Cloud / Microservices | Distributed QuizApp (Eureka Server, API Gateway, Question Service, Quiz Service with Feign) |
 
 ### ♝ MERN Stack
 | Exercise | Category | Description |

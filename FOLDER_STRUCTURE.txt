@@ -65,13 +65,19 @@
   │
   ├── Spring_Projects/
   │   │   → Exercises using Spring Framework / Spring Boot
-  │   │   → REST APIs, MVC, Spring Security, Spring Data JPA
+  │   │   → REST APIs, MVC, Spring Security, Spring Data JPA, Microservices
   │   │   → Typically Maven/Gradle with application.properties
   │   │
   │   ├── ecom-proj/          → E-commerce REST API with Spring Boot
   │   ├── springSecurity/     → Spring Security implementation and examples
   │   ├── SpringOauth2/       → OAuth2 implementation with Spring Boot
-  │   └── (Spring Boot exercises go here)
+  │   ├── quizapp/            → Monolithic Quiz REST API with Spring Boot & MySQL
+  │   └── Microservices/      → Spring Cloud & Microservices architecture
+  │       └── quizapp/        → Quiz Application converted to Microservices
+  │           ├── service-registry/   → Netflix Eureka Server (Port 8761)
+  │           ├── api-gateway/        → Spring Cloud Gateway (Port 8765)
+  │           ├── question-service/   → Question Service with MySQL (Port 8081)
+  │           └── quiz-service/       → Quiz Service with OpenFeign (Port 8082)
   │
   ├── Hibernate_JPA/
   │   │   → ORM exercises using Hibernate or Jakarta Persistence API
@@ -163,6 +169,14 @@
               tomcat: Apache Tomcat 10.1.x installations
               _Inbox: Drop zone for new folders added
 
-  [Add new entries here when new stacks or folders are added]
+  [Oct 2026] - Added QuizApp to Java_Stack/Spring_Projects:
+              - quizapp: Monolithic Spring Boot + JPA + MySQL application
+              - Microservices/quizapp:
+                  • service-registry (Netflix Eureka Server)
+                  • api-gateway (Spring Cloud Gateway)
+                  • question-service (Spring Boot REST + MySQL)
+                  • quiz-service (Spring Boot + OpenFeign client)
+              - Un-nested duplicate folder structures and fixed all compilation/logic bugs
+              - Added comprehensive documentation and testing guide
 
 ══════════════════════════════════════════════════════════════════════════════
