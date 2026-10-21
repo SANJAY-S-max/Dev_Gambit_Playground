@@ -96,6 +96,7 @@ Dev_Gambit_Playground/               ← The Chessboard
 | SpringOauth2 | Spring Boot | OAuth2 implementation with Spring Boot |
 | quizapp | Spring Boot | Monolithic Quiz REST API with Spring Boot & MySQL |
 | Microservices/quizapp | Spring Cloud / Microservices | Distributed QuizApp (Eureka Server, API Gateway, Question Service, Quiz Service with Feign) |
+| Microservices/MicroserviceTutorials | Spring Cloud / Microservices | YouTube Tutorial Reference Implementation (Eureka, Gateway, Question & Quiz Services + SQL seed data) |
 
 ### ♝ MERN Stack
 | Exercise | Category | Description |

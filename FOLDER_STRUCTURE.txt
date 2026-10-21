@@ -73,11 +73,18 @@
   │   ├── SpringOauth2/       → OAuth2 implementation with Spring Boot
   │   ├── quizapp/            → Monolithic Quiz REST API with Spring Boot & MySQL
   │   └── Microservices/      → Spring Cloud & Microservices architecture
-  │       └── quizapp/        → Quiz Application converted to Microservices
-  │           ├── service-registry/   → Netflix Eureka Server (Port 8761)
-  │           ├── api-gateway/        → Spring Cloud Gateway (Port 8765)
-  │           ├── question-service/   → Question Service with MySQL (Port 8081)
-  │           └── quiz-service/       → Quiz Service with OpenFeign (Port 8082)
+  │       ├── quizapp/        → Quiz Application converted to Microservices
+  │       │   ├── service-registry/   → Netflix Eureka Server (Port 8761)
+  │       │   ├── api-gateway/        → Spring Cloud Gateway (Port 8765)
+  │       │   ├── question-service/   → Question Service with MySQL (Port 8081)
+  │       │   └── quiz-service/       → Quiz Service with OpenFeign (Port 8082)
+  │       │
+  │       └── MicroserviceTutorials/  → YouTube Tutorial Reference Implementation
+  │           ├── service-registry/   → Eureka Server reference
+  │           ├── api-gateway/        → API Gateway reference
+  │           ├── question-service/   → Question Service reference
+  │           ├── quiz-service/       → Quiz Service reference
+  │           └── question-table-data.sql → Question database seed script
   │
   ├── Hibernate_JPA/
   │   │   → ORM exercises using Hibernate or Jakarta Persistence API
